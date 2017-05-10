@@ -1,0 +1,10 @@
+Lab 02
+Connect with x3270:
+
+- $ x3270 L:<IP>:<port>
+- Type LOGON APPLID(CICSTS51)
+- Clear the screen
+  - Open Keyboard (top right)
+  - Click 'Clear'
+- Type anywhere on the screen: CEMT SYSTEM INQUIRE
+- Find current os level and cics level

@@ -1,0 +1,7 @@
+- launch python
+copy tn3270lib/tn3270lib.py to local folder
+- import the tn3270 library
+- Connect using the initiate function
+
+Hint: You can print the screen multiple ways
+

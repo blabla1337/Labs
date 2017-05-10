@@ -1,0 +1,73 @@
+Lab 05: 
+
+1) Obtain LU name
+
+There are two ways to get through this. One is to use the tn3270lib variable 'connected_lu' the other is by turning on debugging:
+
+connected_lu:
+$ python 
+>>> import tn3270lib
+>>> tn3270 = tn3270lib.TN3270()
+>>> tn3270.initiate("10.10.0.14",23)
+True
+>>> tn3270.connected_lu
+'<Lu Name>'
+>>>
+
+Through Debugging:
+>>> import tn3270lib
+>>> tn3270 = tn3270lib.TN3270()
+>>> tn3270.set_debuglevel(1)
+>>> tn3270.initiate("10.10.0.14",23)
+(read through messages until you see 'LU Name: xxxxx')
+
+2) Enumerate LUs
+
+To enumerate LUs this simple python script will suffice:
+
+import tn3270lib,time
+host   = ”ip/hostname"
+port = 23
+print "Simple Python Script to find LUs"
+# Copyright Philip Young
+tn3270 = tn3270lib.TN3270()
+# tn3270.set_debugleve(1)
+for i in range(15,40):
+    lu = 'SMOGLU' + "{0:0>2}".format(i)
+    tn3270.set_LU(lu)
+    if tn3270.initiate(host,port):
+        print lu,": True”
+    else:
+        print lu,": False"
+    time.sleep(1) # Without this we kill the demo system
+
+Save it as 'enum_lu.py' and launch with python (after changing the host and port variables).
+
+3) VTAM Application ID enumeration
+
+Use Nmap to enumerate application IDs.
+
+nmap -n -dd -vv -p <port> <ip> -sV \
+--script vtam-enum \
+--script-args \
+vtam-enum.path=/<folder>/,\
+idlist=vtam.txt,\
+brute.threads=1,\
+brute.start=1,\
+brute.delay=3,\
+unpwdb.timelimit=0
+
+Bonus: CICS Transaction ID Enumeration
+This is optional. Please make sure brute.delay is set to a high number or you will get booted.
+
+nmap -vv -n -Pn -sV -p <port> <ip> \
+--script cics-enum \
+--script-args \
+cics-enum.commands="logon applid(cics003)",\
+unpwdb.timelimit=0,\
+brute.threads=1,\
+brute.start=1,\
+brute.delay=2,\
+cics-enum.path=/<folder>/
+
+This only searches for default transactions IDs. If you populate a file with other transactions to search for you can add it by adding 'idlist=<file>' to the script arguments.

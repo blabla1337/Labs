@@ -1,0 +1,38 @@
+Lab 06: Using Python and s3270 write a script to logon to the mainframe
+
+After Logging on issue the ‘LISTCAT’ command
+
+Using Python:
+
+import tn3270lib
+tn = tn3270lib.TN3270()
+tn.initiate('<IP address>',<port>)
+tn.send_cursor('TSO')
+tn.send_cursor('USERNAME')
+tn.send_cursor('PASSWORD')
+tn.get_all_data()
+tn.print_screen()
+tn.send_cursor('LISTCAT')
+tn.get_all_data()
+tn.print_screen()
+
+Using s3270:
+
+#!/bin/bash
+# $1 = tn3270 L:<host>:<port>
+# $2 = Userid
+# $3 = Password
+
+s3270 $1 << EOF
+Wait(InputField)
+String(tso\n)
+String($2\n)
+PrintText(string)
+String($3\n)
+Wait(InputField)
+PrintText(string)
+String(LISTCAT)
+Enter
+PrintText(string)
+EOF
+

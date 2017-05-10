@@ -1,0 +1,38 @@
+Connect to tn3270 Server:
+From terminal: x3270 L:<ip>:<port>
+From Gui: 
+- Launch x3270
+- Click connect
+- Type L:<ip address>:<port>
+
+Once Connected:
+
+- Type ‘LOGON APPLID(TSO)’
+- Type assigned userid
+- Type password
+
+After Logon:
+
+- Type ‘ISPF’
+- Type ‘3.4’
+- Type ‘<userid>.*
+- Move curser to command column in front of <userid>.JCL
+- Type ‘E’
+- Replace ‘INFOSEC FROM JCL’ to ‘<your name>’
+- Go to command line, type ‘save’ then ‘sub’
+
+Get the job output:
+
+- Navigate to SDSF
+- Type ‘ST’
+- Beside the job you submitted type ‘?’
+- Beside SYSTSPRT type ‘s’
+
+Get 'PATH' datasets:
+
+- Exit SDSF (F3)
+- In command bar type ‘TSO ISRDDN’
+- Hit F8 until you find SYSEXEC
+OR
+- Type ‘F SYSEXEC’ and hit enter
+

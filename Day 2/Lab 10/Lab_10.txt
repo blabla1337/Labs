@@ -1,0 +1,9 @@
+Lab 10: Crack Password Offline
+
+Using john the ripper crack the accounts in the `Mainframe_users.txt`. 
+
+Type:
+
+$ john Mainframe_users.txt
+
+And wait for output

@@ -1,0 +1,17 @@
+Lab 11: Get System Special
+
+Using any APF library you have access to create 
+
+The easiest method is to Upload the rexx script in /Tools/Privex/ELV.APF:
+
+- Upload ELV.APF with FTP
+- Connect with x3270
+- Logon
+- Search for APF libraries `ex 'userid.elv.apf' 'list'`
+- Use found APF Authorized library: `ex 'userid.elv.apf' '<apf library>'`
+
+Issue the LU command to see if it was successful.
+
+Alternate:
+
+Use metasploit to automate this task for you

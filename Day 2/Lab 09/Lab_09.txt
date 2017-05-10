@@ -1,0 +1,9 @@
+Lab 09: List APF Authorized Libraries
+
+There's multiple ways to list the APF Authorized Libraries:
+
+1) In SDSF issue the `/D PROG,APF` command
+2) Use the script apf_list.rexx in the `Tools` Folder
+3) Use the rexx Enumeration script in the Tools/Enumeration folder with the 'APF' flag
+
+Only one will help you with the Bonus question

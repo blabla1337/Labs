@@ -1,0 +1,9 @@
+Lab 03: Decode tn3270 Session
+
+Launch x3270 with -trace flag. It will open a separate window.
+
+Open wireshark and open the file tn3270e-session.pcapng
+- right click a packet and select 'Follow TCP Stream'
+- Convert from ASCII to EBCDIC
+
+
