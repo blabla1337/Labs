@@ -26,19 +26,19 @@
 
 # Top-level Makefile for suite3270.
 
-all:  x3270 c3270 s3270 tcl3270 pr3287 wc3270 ws3270 wpr3287
+all:  x3270
 
 # Cleverness for 'make targets':
 #  MIXED is true if there is at least one Unix target and at least one Windows
 #   target
 #  M1 is true if there is more than one target
-MIXED := $(shell (echo  x3270 c3270 s3270 tcl3270 pr3287 wc3270 ws3270 wpr3287 | grep -q '\<[^w]') && (echo  x3270 c3270 s3270 tcl3270 pr3287 wc3270 ws3270 wpr3287 | grep -q '\<[w]') && echo true)
-M1 := $(shell test `echo  x3270 c3270 s3270 tcl3270 pr3287 wc3270 ws3270 wpr3287 | wc -w` -gt 1 && echo true)
+MIXED := $(shell (echo  x3270 | grep -q '\<[^w]') && (echo  x3270 | grep -q '\<[w]') && echo true)
+M1 := $(shell test `echo  x3270 | wc -w` -gt 1 && echo true)
 
 # List targets
 targets:
 	@echo "Targets:"
-	@echo " all                  x3270 c3270 s3270 tcl3270 pr3287 wc3270 ws3270 wpr3287"
+	@echo " all                  x3270"
 ifdef MIXED
 	@echo "  unix                build all Unix programs"
 	@echo "  windows             build all Windows programs"
@@ -138,7 +138,7 @@ unix: c3270 s3270 tcl3270 x3270 pr3287
 windows: wc3270 ws3270 wpr3287
 
 # Dependency generation
-depend:  x3270-depend c3270-depend s3270-depend tcl3270-depend pr3287-depend wc3270-depend ws3270-depend wpr3287-depend unix-lib-depend windows-lib-depend
+depend:  x3270-depend unix-lib-depend
 unix-lib-depend: lib3270-depend lib3270i-depend lib32xx-depend lib3270stubs-depend
 windows-lib-depend: libw3270-depend libw3270i-depend libw32xx-depend libw3270stubs-depend
 lib-depend: unix-lib-depend windows-lib-depend
@@ -178,7 +178,7 @@ wpr3287-depend:
 	cd wpr3287 && $(MAKE) depend
 
 # Installation
-install unix-install:  x3270-install c3270-install s3270-install tcl3270-install pr3287-install
+install unix-install:  x3270-install
 x3270-install: x3270
 	cd x3270 && $(MAKE) install
 c3270-install: c3270
@@ -191,7 +191,7 @@ pr3287-install: pr3287
 	cd pr3287 && $(MAKE) install
 
 # Manual page install
-install.man unix-install.man:  x3270-install.man c3270-install.man s3270-install.man tcl3270-install.man pr3287-install.man
+install.man unix-install.man:  x3270-install.man
 x3270-install.man: x3270
 	cd x3270 && $(MAKE) install.man
 c3270-install.man: c3270
@@ -204,7 +204,7 @@ pr3287-install.man: pr3287
 	cd pr3287 && $(MAKE) install.man
 
 # Clean and clobber targets
-clean:  x3270-clean c3270-clean s3270-clean tcl3270-clean pr3287-clean wc3270-clean ws3270-clean wpr3287-clean unix-lib-clean windows-lib-clean
+clean:  x3270-clean unix-lib-clean
 unix-lib-clean: lib3270-clean lib3270i-clean lib32xx-clean lib3270stubs-clean
 windows-lib-clean: libw3270-clean libw3270i-clean libw32xx-clean libw3270stubs-clean
 lib-clean: unix-lib-clean windows-lib-clean
@@ -243,7 +243,7 @@ ws3270-clean:
 wpr3287-clean:
 	cd wpr3287 && $(MAKE) clean
 
-clobber:  x3270-clobber c3270-clobber s3270-clobber tcl3270-clobber pr3287-clobber wc3270-clobber ws3270-clobber wpr3287-clobber unix-lib-clobber windows-lib-clobber
+clobber:  x3270-clobber unix-lib-clobber
 unix-lib-clobber: lib3270-clobber lib3270i-clobber lib32xx-clobber lib3270stubs-clobber
 windows-lib-clobber: libw3270-clobber libw3270i-clobber libw32xx-clobber libw3270stubs-clobber
 lib-clobber: unix-lib-clobber windows-lib-clobber
