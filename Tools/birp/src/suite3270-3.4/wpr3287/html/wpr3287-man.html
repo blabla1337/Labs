@@ -1,0 +1,322 @@
+<html>
+<head>
+<title>wpr3287 Manual Page</title>
+<link HREF="http://www.w3.org/StyleSheets/Core/Steely" TYPE="text/css" REL="stylesheet">
+</head>
+<body>
+<h1>wpr3287 Manual Page</h1>
+<h2>Contents</h2>
+<blockquote>
+<a HREF="#Name">Name</a><br>
+<a HREF="#Synopsis">Synopsis</a><br>
+<a HREF="#Description">Description</a><br>
+<a HREF="#Options">Options</a><br>
+<a HREF="#Environment">Environment</a><br>
+<a HREF="#Proxy">Proxy</a><br>
+<a HREF="#See-Also">See Also</a><br>
+<a HREF="#Copyrights">Copyrights</a><br>
+<a HREF="#Version">Version</a><br>
+</blockquote>
+<a NAME="Name"></a><h2>Name</h2>
+wpr3287 -
+<font size=-1>IBM</font>
+host printing tool
+<a NAME="Synopsis"></a><h2>Synopsis</h2>
+<b>wpr3287</b>
+[ <i>options</i> ]       
+[ L: ] [[ <i>LUname</i> [, <i>LUname</i> ...]@] <i>hostname</i> [: <i>port</i> ]] 
+<a NAME="Description"></a><h2>Description</h2>
+<b>wpr3287</b>
+opens a telnet connection to an
+<font size=-1>IBM</font>
+host, and emulates an <font size=-1>IBM</font> 3287 printer.
+It implements RFCs 2355 (TN3270E), 1576 (TN3270) and 1646 (LU name selection).
+<p>
+If the <i>hostname</i> is prefixed with <b>L:</b>, the connection will be made
+through an SSL tunnel.
+<b>wpr3287</b> also supports TELNET START-TLS option negotiation without any
+need for command-line options.
+<p>
+A specific LU name to use may be specified by prepending it to the
+<i>hostname</i>
+with an
+`<b>@</b>'.
+Multiple LU names to try can be separated by commas.
+An empty LU can be placed in the list with an extra comma.
+<p>
+The port to connect to defaults to
+<b>telnet</b>.
+This can be overridden by appending a
+<i>port</i>
+to the
+<i>hostname</i>
+with a colon
+`<b>:</b>'.
+<a NAME="Options"></a><h2>Options</h2>
+<b>wpr3287</b>
+understands the following options:
+<dl><dt><b>-accepthostname</b> <i>spec</i></dt><dd>
+Specifies a particular hostname to accept when validating the name presented
+in the host's SSL certificate, instead of comparing to the name or address
+used to make the connection.
+<i>spec</i> can either be <b>any</b>, which
+disables name validation, <b>DNS:</b><i>hostname</i>, which matches a
+particular DNS hostname, or <b>IP:</b><i>address</i>, which matches a
+particular numeric IPv4 or IPv6 address.
+<dt><b>-assoc</b> <i>LUname</i></dt><dd>
+Causes the session to be associated with the specified
+<i>LUname</i>.
+<dt><b>-blanklines</b></dt><dd>
+In LU3 formatted mode, print blank lines even if they are all NULLs or control
+characters.
+(This is a violation of the 3270 printer protocol, but some hosts require it.)
+<dt><b>-cadir</b> <i>directory</i></dt><dd>
+Specifies a directory containing CA (root) certificates to use when verifying a
+certificate provided by the host.
+<dt><b>-cafile</b> <i>filename</i></dt><dd>
+Specifies a <font size=-1>PEM</font>-format file containing CA (root) certificates to use
+when verifying a certificate provided by the host.
+<dt><b>-certfile</b> <i>filename</i></dt><dd>
+Specifies a file containing a certificate to provide to the host, if
+requested.
+The default file type is <font size=-1>PEM</font>.
+<dt><b>-certfiletype</b> <i>type</i></dt><dd>
+Specifies the type of the certificate file specified
+by <b>-certfile</b>.
+<i>Type</i> can be <b>pem</b> or <b>asn1</b>.
+<dt><b>-chainfile <i>filename</i></b></dt><dd>
+Specifies a certificate chain file in <font size=-1>PEM</font> format, containing a
+certificate to provide to the host if requested, as well as one or more
+intermediate certificates and the CA certificate used to sign that certificate.
+If <b>-chainfile</b> is specified, it
+overrides <b>-certfile</b>.
+<dt><b>-charset</b> <i>name</i></dt><dd>
+Specifies an alternate host code page (input <font size=-1>EBCDIC</font> mapping).
+The default maps the U.S. English (037) code page to the
+the system ANSI code page (unless overridden by the -printercp option).
+wpr3287 generally supports the same host character sets as
+wc3270.
+
+<dt><b>-nocrlf</b></dt><dd>
+Causes newline characters in the output to be left as-is, and not expanded to
+carriage-return/linefeed sequences.
+<dt><b>-crthru</b></dt><dd>
+In unformatted 3270 mode, causes <font size=-1>EBCDIC</font> CR orders to be passed to
+directly to the printer as <font size=-1>ASCII</font> CR characters, and the output buffer to
+be flushed, instead of being specially interpreted by <i>wpr3287</i>.
+<p>
+By default, <font size=-1>EBCDIC</font> CRs cause the (virtual) print head to return to
+column 0, so that subsequent text overwrites what is already in the buffer,
+and the buffer is flushed only when an <font size=-1>EBCDIC</font> NL or EM order is
+received.
+
+<dt><b>-eojtimeout</b> <i>seconds</i></dt><dd>
+Causes <i>wpr3287</i> to complete the print job after <i>seconds</i> seconds
+of inactivity.
+<dt><b>-emflush</b></dt><dd>
+Causes <i>wpr3287</i> to flush any pending printer output whenever an EM
+(End of Medium) order arrives in unformatted 3270 mode.
+This can help preserve multi-page output with hosts that do not clear the 3270
+buffer between pages.
+(Note: This option is defined for historical purposes only; <b>-emflush</b> is now
+the default.)
+<dt><b>-noemflush</b></dt><dd>
+Causes <i>wpr3287</i> not to flush any pending printer output when an EM
+(End of Medium) order arrives in unformatted 3270 mode.
+<dt><b>-ignoreeoj</b></dt><dd>
+Ignore TN3270E PRINT-EOJ commands, relying on UNBIND commands to indicate
+the ends of print jobs.
+<dt><b>-ffeoj</b></dt><dd>
+Causes <i>wpr3287</i> to add a FF (formfeed) at the end of each print job.
+<dt><b>-ffskip</b></dt><dd>
+Causes <i>wpr3287</i> to ignore a FF (formfeed) order if it occurs
+at the top of a page.
+<dt><b>-ffthru</b></dt><dd>
+In SCS mode, causes <i>wpr3287</i> to pass FF (formfeed) orders through to the
+printer as ASCII formfeed characters, rather than simulating them based on the
+values of the MPL (maximum presentation line) and TM (top margin) parameters.
+<dt><b>-keyfile</b> <i>filename</i></dt><dd>
+Specifies a file containing the private key for the certificate file
+(specified via <b>-certfile</b> or <b>-chainfile</b>).
+The default file type is <font size=-1>PEM</font>.
+<dt><b>-keyfiletype</b> <i>type</i></dt><dd>
+Specifies the type of the private key file specified
+by <b>-keyfile</b>.
+<i>Type</i> can be <b>pem</b> or <b>asn1</b>.
+<dt><b>-keypasswd</b> <i>type</i>:<i>value</i></dt><dd>
+Specifies the password for the private key file, if it is encrypted.
+The argument can be <b>file</b>:<i>filename</i>, specifying that the
+password is in a file, or <b>string</b>:<i>string</i>, specifying the
+password on the command-line directly.
+<dt><b>-mpp <i>n</i></b></dt><dd>
+Specifies a non-default value for the Maximum Presentation Position (the
+line length for unformatted Write commands).
+The default is 132.
+The minimum is 40 and the maximum is 256.
+<dt><b>-printer</b> <i>printer</i></dt><dd>
+Specifies the Windows printer to use for each print job.
+The default is to use the printer specified by the <b>$PRINTER</b> environment
+variable, if defined, and otherwise to use the default Windows printer.
+<p>
+The printer can be the name of a local printer, or a UNC path to a remote
+printer, e.g., <b>\\server\printer1</b>.
+<dt><b>-printercp</b> <i>codepage</i></dt><dd>
+Specifies the code page to use when generating printer output.
+The default is to use the system ANSI code page.
+<dt><b>-proxy <i>type</i>:<i>host</i>[:<i>port</i>]</b></dt><dd>
+Causes <b>wpr3287</b> to connect via the specified proxy, instead of
+using a direct connection.
+The <i>host</i> can be an IP address or hostname.
+The optional <i>port</i> can be a number or a service name.
+For a list of supported proxy <i>types</i>, see <a HREF="#Proxy"><font size=-1>PROXY</font></a>
+below.
+<dt><b>-reconnect</b></dt><dd>
+Causes <i>wpr3287</i> to reconnect to the host, whenever the connection is
+broken.
+There is a 5-second delay between reconnect attempts, to reduce network
+thrashing for down or misconfigured hosts.
+<dt><b>-selfsignedok</b></dt><dd>
+Allow self-signed host certificates.
+<dt><b>-skipcc</b></dt><dd>
+For unformatted writes, skip ASA carriage control characters (e.g., blank for
+single-space, 0 for double-space, 1 for formfeed, etc.) in the first
+position of each line of host output.
+<dt><b>-trace</b></dt><dd>
+Turns on data stream tracing.
+Trace information is usually saved in the file
+<b>x3trc.</b><i>pid</i><b>.txt</b>.
+<dt><b>-tracedir</b> <i>dir</i></dt><dd>
+Specifies the directory to save trace files in, instead of
+the wc3270 AppData directory.
+<dt><b>-trnpre <i>file</i></b></dt><dd>
+Specifies a file containing data that will be sent to the printer before each
+print job.
+The file contents are treated as transparent data, i.e., they are not
+translated in any way.
+<dt><b>-trnpost <i>file</i></b></dt><dd>
+Specifies a file containing data that will be sent to the printer after each
+print job.
+The file contents are treated as transparent data, i.e., they are not
+translated in any way.
+<dt><b>-v</b></dt><dd>
+Display build and version information and exit.
+<dt><b>-verifycert</b></dt><dd>
+Verify the host certificate for tunneled SSL and negotiated SSL/TLS
+connections.
+<dt><b>-xtable <i>file</i></b></dt><dd>
+Specifies a file containing transparent data translations.
+The file specifies EBCDIC characters that will be translated into transparent
+ASCII data (data that will not be further translated and will not count as
+taking up column(s) on the print line).
+Any printable ECBDIC code can be translated to zero or more ASCII characters.
+<p>
+The table consists of lines that look like:
+<blockquote><b>ebcdic</b> <i>ebcdic-code</i> <b>ascii</b> <i>ascii-code</i>...
+</blockquote>
+<p>
+The <i>ebcdic-code</i> can be specified in hexadecimal X'<i>nn</i>' notation or
+as numbers in decimal, octal (with a leading 0) or hexadecimal (with a leading
+0x).
+The <i>ascii-code</i>s can be specified as numbers in decimal, octal or
+hexadecimal, control codes such as <b>^X</b>, symbolic control codes such
+as <b>CR</b> or <b>Escape</b>, or as double-quoted strings, following the
+full C-language conventions, such as <b>&#92;r</b> for a carriage return.
+Comments begin with <b>#</b>, <b>!</b> or <b>//</b>.
+<p>
+Here are some examples of translations.
+<br>
+# Expand EBCDIC D to an escape sequence.
+<br>
+ebcdic X'C4' ascii Esc "]1,3" 0x6d
+<br>
+# Delete EBCDIC B's
+<br>
+ebcdic X'C2' ascii
+<p>
+The full list of symbolic control codes is: <b>BS CR BEL ESC ESCAPE FF HT LF NL NUL SPACE TAB VT</b>.
+</dl>
+
+<a NAME="Environment"></a><h2>Environment</h2>
+<dl><dt><b>PRINTER</b></dt><dd>
+Specifies the Windows printer to use for print jobs.
+The <b>-printer</b> command-line option overrides <b>$PRINTER</b>.
+</dl>
+<a NAME="Proxy"></a><h2>Proxy</h2>
+The <b>-proxy</b> option
+causes wpr3287 to use a proxy server to connect to the host.
+The syntax of the option is:
+<blockquote><i>type</i>:<i>host</i>[:<i>port</i>]
+</blockquote>
+The supported values for <i>type</i> are:
+<table BORDER cols=3 width="75%">
+<tr><td ><center>Proxy Type</center></td>	<td ><center>Protocol</center></td>	<td ><center>Default Port</center></td></tr>
+
+<tr><td ><center>http</center></td>	<td ><center>RFC 2817 HTTP tunnel (squid)</center></td>	<td ><center>3128</center></td></tr>
+<tr><td ><center>passthru</center></td>	<td ><center>Sun in.telnet-gw</center></td>	<td ><center>none</center></td></tr>
+<tr><td ><center>socks4</center></td>	<td ><center>SOCKS version 4</center></td>	<td ><center>1080</center></td></tr>
+<tr><td ><center>socks5</center></td>	<td ><center>SOCKS version 5 (RFC 1928)</center></td>	<td ><center>1080</center></td></tr>
+<tr><td ><center>telnet</center></td>	<td ><center>No protocol (just send <b>connect</b> <i>host port</i>)</center></td>	<td ><center>none</center></td></tr>
+</table>
+<p>
+The special types <b>socks4a</b> and <b>socks5d</b> can also be used to force
+the proxy server to do the hostname resolution for the SOCKS protocol.
+<a NAME="See-Also"></a><h2>See Also</h2>
+wc3270(1)
+<br>
+Data Stream Programmer's Reference, IBM GA23-0059
+<br>
+Character Set Reference, IBM GA27-3831
+<br>
+3174 Establishment Controller Functional Description, IBM GA23-0218
+<br>
+RFC 1576, TN3270 Current Practices
+<br>
+RFC 1646, TN3270 Extensions for LUname and Printer Selection
+<br>
+RFC 2355, TN3270 Enhancements
+<a NAME="Copyrights"></a><h2>Copyrights</h2>
+Copyright &copy; 1993-2014, Paul Mattes.
+<br>
+Copyright &copy; 1990, Jeff Sparkes.
+<br>
+Copyright &copy; 1989, Georgia Tech Research Corporation (GTRC), Atlanta, GA
+ 30332.
+<br>
+All rights reserved.
+<p>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+<dl>
+<dt>*</dt><dd>
+Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+<dt>*</dt><dd>
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+<dt>*</dt><dd>
+Neither the names of Paul Mattes, Jeff Sparkes, GTRC nor the names of
+their contributors may be used to endorse or promote products derived
+from this software without specific prior written permission.
+<p>
+THIS SOFTWARE IS PROVIDED BY PAUL MATTES, JEFF SPARKES AND GTRC `AS IS' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL PAUL MATTES, JEFF SPARKES OR GTRC BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+<a NAME="Version"></a><h2>Version</h2>
+wpr3287 3.4ga9
+<hr>
+<i>
+This HTML document and the accompanying troff document were generated with
+a set of write-only <b>m4</b> macros and the powerful <b>vi</b> editor.
+<br>Last modified 23 October 2015.
+</i>
+</body>
+</html>

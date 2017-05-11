@@ -1,0 +1,2320 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>x3270 Resources</title>
+ <link HREF="http://www.w3.org/StyleSheets/Core/Steely" TYPE="text/css" REL="stylesheet">
+ <style type="text/css">
+<!--
+.indented
+{
+    padding-left: 50pt;
+    padding-right: 50pt;
+}
+-->
+</style>
+</head>
+<body>
+<h1>x3270 Resources</h1>
+ <i>Resources</i> are used to configure x3270.  Resources are named items with
+ string, integer or Boolean values.
+ <p>
+ Resource definitions come from the following sources:
+ <ul>
+ <li>Default values are compiled into x3270.</li>
+ <li>Standard X11 methods can be used to override the compiled-in
+  defaults.  These methods include:
+  <ul>
+  <li>The x3270 app-defaults file (only if x3270 is built with app-defaults
+   support).  This can be a locale-specific or generic app-defaults file
+   located in the user's home directory or in the system X11 directory.</li>
+  <li>Definitions set by the <i>xrdb</i> command.
+  <li>The <b>~/.Xdefaults</b> file.
+ </ul>
+ <li>If a session file <b><i>foo</i>.x3270</b> is specified on the command line,
+ its contents are applied.
+ Otherwise, if the x3270 profile (<b>~/.x3270pro</b>) exists, it is read and its
+ contents are applied.
+ These definitions override resource values defined by
+ X11 methods and
+ compiled-in defaults.</li>
+ <li>Command-line options override all other resource definitions.  If more
+  than one command-line option sets a resource, the last one is used.</li>
+ </ul>
+ Many resources have their own command-line switches, which are listed below.
+ Those that do not can still be set from the command-line via the <b>-xrm</b>
+ command-line option.  For example <a href=#bsdTm>x3270.bsdTm</a> can be set by the
+ following command-line option:
+ <pre>
+     -xrm 'x3270.bsdTm: true'
+ </pre>
+ Note that <b>-xrm</b> is supported on all of the 3270 emulators, not just on
+ x3270.
+ <h2>Resource File Syntax</h2>
+ A resource file
+ (app-defaults file, profile or session file)
+ has the following syntax.
+ <ul>
+  <li>Each definition consists of:
+  <pre>
+    <b>x3270.</b><i>resource-name</i><b>:</b> <i>value</i>
+  </pre></li>
+  <li>Comment lines begin with <b>!</b>.</li>
+  <li>Line continuation is indicated by a backshash (<b>\</b>) character at
+   the end of a line.</li>
+  <li>Multi-line resources, such as keymap definitions, are split with
+   newline characters, e.g.:
+  <pre>
+    <b>x3270.keymap.foo: \
+      &lt;Key>a: String("bob") \n\
+      &lt;Key>b: String("fred") \n\
+      &lt;Key>c: String("joe")</b>
+  </pre></li>
+ </ul>
+<h2>Alphabetical Resource List</h2>
+<a name="acceptHostname"></a>
+<b>Name:</b> x3270.acceptHostname<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -accepthostname
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a specific name to accept when validating the name presented in
+    the server's SSL certificate, instead of using the name or IP address used
+    to make the connection. Takes one of three forms: <b>any</b>, which
+    disables name checking, <b>DNS:</b><i>name</i>, which specifies a DNS
+    hostname, and <b>IP:</b><i>address</i>, which specifies a numeric IPv4 or
+    IPv6 address.
+</p>
+<a name="activeIcon"></a>
+<b>Name:</b> x3270.activeIcon<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -activeicon
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270's icon becomes a live miniature of the
+    screen display.
+</p>
+<a name="aidWait"></a>
+<b>Name:</b> x3270.aidWait<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set aidWait
+, -clear aidWait
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will not block a script after executing
+    an AID action (<b>Enter</b>, <b>Clear</b>, <b>PF</b> or <b>PA</b>).
+    It is then script's responsibility to poll x3270's status until it shows
+    that the keyboard is no longer unlocked.
+</p>
+<a name="allowResize"></a>
+<b>Name:</b> x3270.allowResize<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, the x3270 window can be resized by the mouse (actually,
+    by the
+    window manager).  When false, the window can only be resized from
+    menu
+    options.  The purpose of disabling mouse resizing is to allow a window
+    bigger than will fit on the screen, which some window managers (e.g., mwm)
+    will not allow if permitted to resize it.
+</p>
+<a name="altCursor"></a>
+<b>Name:</b> x3270.altCursor<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set altCursor
+, -clear altCursor
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Underline Cursor<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Block Cursor<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, this causes x3270 to use the alternate
+    (underscore) cursor.  When false, it will use a block cursor.
+</p>
+<a name="aplCircledAlpha"></a>
+<b>Name:</b> x3270.aplCircledAlpha<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When set to true, allows x3270 to work properly with special APL fonts like
+    the APL385 font.
+    APL385 maps the APL underscored alphabetic characters, which have no
+    Unicode equivalent, to the DBCS circled alphabetic characters in the range
+    U+24B6 to U+25CF.
+    Otherwise, the only way to display these characters is with one of the
+    special 3270 fonts included with x3270.
+    <p class=indented>
+    Because this mapping is non-standard, this setting affects only the
+    display. The <b>Ascii</b> action will always output underscored alphabetics
+    as blanks, and copy-and-paste operations will also represent them this way,
+    though this may change to use the Unicode Combining Low Line character
+    U+0332 at some point.
+</p>
+<a name="aplMode"></a>
+<b>Name:</b> x3270.aplMode<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -apl
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Enables x3270 APL mode.  APL mode appends <b>apl</b> to the list of names
+    in <a href=#keymap>x3270.keymap</a> (causing the <b>Alt</b> key plus many alphanumeric keys to
+    produce basic APL symbols), sets <a href=#composeMap>x3270.composeMap</a> to <b>apl</b> (allowing
+    <b>Compose</b> key sequences to construct complex APL symbols), and sets
+    <a href=#charset>x3270.charset</a> to <b>apl</b> (allowing the display of APL symbols using
+    several of the 3270 fonts).
+</p>
+<a name="background"></a>
+<b>Name:</b> x3270.background<br>
+<b>Type</b>: String<br>
+<b>Default</b>: white<br>
+<b>Command Line</b>: -bg
+, -rv
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The background color for menus, buttons, and on monochrome X11 displays, the
+    emulator window.
+</p>
+<a name="bellVolume"></a>
+<b>Name:</b> x3270.bellVolume<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Controls the volume used when ringing the terminal bell.  The value
+    ranges from -100 (silent) through 0 (normal) to +100 (loud).  Not all
+    X11 servers can vary the bell volume, other than turning it on and off.
+    This resource can be overridden by <a href=#visualBell>x3270.visualBell</a>, which
+    if true, will replace the bell with a flash of the screen.
+</p>
+<a name="bindLimit"></a>
+<b>Name:</b> x3270.bindLimit<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will restrict its screen dimensions to those specified in
+    the BIND image sent by the host.
+    If false, it will not.
+</p>
+<a name="blankFill"></a>
+<b>Name:</b> x3270.blankFill<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set blankFill
+, -clear blankFill
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Blank Fill<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, in 3270 mode x3270 will automatically convert
+    trailing blanks in a field to NULLs in order to insert a character, and will
+    automatically convert leading NULLs to blanks so that input data is not
+    squeezed to the left.  This works around some of the quirkier behavior of
+    real 3270 terminals.
+</p>
+<a name="boldColor"></a>
+<b>Name:</b> x3270.boldColor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: green<br>
+<b>Description</b>:<br>
+<p class=indented>    This resource defines the X11 color used to display intensified text in
+    3278 mode.
+    <p class=indented>
+    Previous versions of x3270 implemented something called <i>pseudo-color
+    mode</i>, where a monochrome (3278) terminal was emulated with various
+    colors assigned to different kinds of fields.
+    To emulate pseudo-color mode with the current version of x3270, select 3278
+    emulation with <a href=#model>x3270.model</a>, set <a href=#inputColor>x3270.inputColor</a> to <b>orange</b> and set
+    <a href=#boldColor>x3270.boldColor</a> to <b>cyan</b>.
+</p>
+<a name="bsdTm"></a>
+<b>Name:</b> x3270.bsdTm<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines x3270's response to the TELNET DO TIMING MARK option.  When set
+    to false, x3270 will respond to DO TIMING MARK with
+    WONT
+    TIMING MARK, which is consistent with most modern TELNET clients.  When
+    true, x3270 will respond with WILL TIMING MARK, which is consistent
+    with the old BSD <i>telnet</i> command and with previous versions of
+    x3270.  In either case, x3270 will never respond to a DONT TIMING MARK option.
+</p>
+<a name="caDir"></a>
+<b>Name:</b> x3270.caDir<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -cadir
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a directory containing CA (root) certificates, used to validate
+    a certificate presented by the host during SSL negotiation.
+    The default is determined by the OpenSSL library on your workstation.
+</p>
+<a name="caFile"></a>
+<b>Name:</b> x3270.caFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -cafile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a PEM-format file containing CA (root) certificates, used to
+    validate a certificate presented by the host during SSL negotiation.
+    The default is determined by the OpenSSL library on your workstation.
+</p>
+<a name="certFile"></a>
+<b>Name:</b> x3270.certFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -certfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a certificate file, provided to the host if requested
+    during SSL negotiation.
+    The default file format is PEM; it can be overridden by <a href=#certFileType>x3270.certFileType</a>.
+    The private key for the certificate is specified by <a href=#keyFile>x3270.keyFile</a>.
+    If <a href=#chainFile>x3270.chainFile</a> is specified, it overrides <a href=#certFile>x3270.certFile</a>.
+</p>
+<a name="certFileType"></a>
+<b>Name:</b> x3270.certFileType<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pem<br>
+<b>Command Line</b>: -certfiletype
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the type of the certificate file specified by <a href=#certFile>x3270.certFile</a>.
+    The value can be <b>pem</b> or <b>asn1</b>.
+</p>
+<a name="chainFile"></a>
+<b>Name:</b> x3270.chainFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -chainfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a certificate chain file, provided to the host if
+    requested during SSL negotiation.
+    The file contains a PEM-format certificate, optionally followed by
+    any intermediate certificates used to sign it, and the CA (root)
+    certificate.
+    The private key for the certificate is specified by <a href=#keyFile>x3270.keyFile</a>.
+    If <a href=#chainFile>x3270.chainFile</a> is specified, it overrides <a href=#certFile>x3270.certFile</a>.
+</p>
+<a name="charClass"></a>
+<b>Name:</b> x3270.charClass<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines groups of characters that should be treated the same when doing
+    cut and paste of words.  Identical in use to the <i>xterm</i> resource
+    of the same name.
+</p>
+<a name="charset"></a>
+<b>Name:</b> x3270.charset<br>
+<b>Type</b>: String<br>
+<b>Default</b>: bracket<br>
+<b>Command Line</b>: -charset
+<br>
+<b>Option</b>: Options -&gt; Character Set<br>
+<b>Description</b>:<br>
+<p class=indented>    This defines the host EBCDIC character set, that is, what glyph (image) is
+    displayed for each EBCDIC code sent by the host, and what EBCDIC code is
+    sent to the host for each character typed on the keyboard.
+    This is more correctly referred to as the <i>host code page</i>.
+    <p class="indented">
+    To display the character sets supported by x3270, use the <b>-v</b>
+    command-line option.
+</p>
+<a name="color8"></a>
+<b>Name:</b> x3270.color8<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will respond to a Query(Color) with a list of 8
+    supported colors.  If false, it will send a list
+    of 16 colors.  The 8-color setting is required for some hosts which
+    abort a session if 16 colors are reported.
+</p>
+<a name="colorBackground"></a>
+<b>Name:</b> x3270.colorBackground<br>
+<b>Type</b>: String<br>
+<b>Default</b>: black<br>
+<b>Description</b>:<br>
+<p class=indented>    The background color for the emulator window.  This resource is used only
+    on color X11 displays when <a href=#model>x3270.model</a> specifies 3278 mode.  On
+    monochrome X11 displays, the background color is <b>white</b>, unless
+    <b>-rv</b>
+    (reverse video) is selected on the command line; in 3279 mode, the screen
+    background is determined by <a href=#colorScheme>x3270.colorScheme</a>.
+</p>
+<a name="colorScheme"></a>
+<b>Name:</b> x3270.colorScheme<br>
+<b>Type</b>: String<br>
+<b>Default</b>: default<br>
+<b>Option</b>: Options -&gt; Color Scheme<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the colors used to paint the emulator window in 3279 (full-color)
+    mode.  This resource is used only when <a href=#model>x3270.model</a> specifies a 3279
+    display.
+    <a href=#colorScheme>x3270.colorScheme</a> is just the name of the color scheme.
+    The actual color scheme definition for color scheme <i>foo</i> is
+    <a href=#colorScheme.foo>x3270.colorScheme.<i>foo</i></a>.
+</p>
+<a name="colorScheme.foo"></a>
+<b>Name:</b> x3270.colorScheme.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    An individual color scheme definition.
+    I.e., to define color scheme <i>foo</i>, a resource named <b>x3270.colorScheme.<i>foo</i></b> must be defined.
+    <p class=indented>
+    Each resource is a whitespace-separated list of 23 items:
+<ol>
+ <li>X11 color for host color 0 NeutralBlack (also used for NVT color 0)</li>
+ <li>X11 color for host color 1 Blue (also used for NVT color 4)</li>
+ <li>X11 color for host color 2 Red (also used for NVT color 1)</li>
+ <li>X11 color for host color 3 Pink (also used for NVT color 5)</li>
+ <li>X11 color for host color 4 Green (also used for NVT color 2)</li>
+ <li>X11 color for host color 5 Turquoise</li>
+ <li>X11 color for host color 6 Yellow (also used for NVT color 3)</li>
+ <li>X11 color for host color 7 NeutralWhite</li>
+ <li>X11 color for host color 8 Black</li>
+ <li>X11 color for host color 9 DeepBlue</li>
+ <li>X11 color for host color 10 Orange</li>
+ <li>X11 color for host color 11 Purple</li>
+ <li>X11 color for host color 12 PaleGreen</li>
+ <li>X11 color for host color 13 PaleTurquoise (also used for NVT color 6)</li>
+ <li>X11 color for host color 14 Grey</li>
+ <li>X11 color for host color 15 white (also used for NVT color 7)</li>
+ <li>X11 color to use if one of 0..15 cannot be allocated (white or black)</li>
+ <li>X11 color to use as the default screen background</li>
+ <li>X11 color to use as the select background</li>
+ <li>Host color (0..15) for unprotected, unhighlighted fields</li>
+ <li>Host color (0..15) for unprotected, highlighted fields</li>
+ <li>Host color (0..15) for protected, unhighlighted fields</li>
+ <li>Host color (0..15) for protected, highlighted fields</li>
+</ol>
+<p class=indented>
+<i>Note</i>: Host color 0 (NeutralBlack) means black on a display screen (a
+white-on-black device) and white on a printer (a black-on-white device).
+Host color 7 (NeutralWhite) means white on a display screen and black on a
+printer.
+</p>
+<a name="composeMap"></a>
+<b>Name:</b> x3270.composeMap<br>
+<b>Type</b>: String<br>
+<b>Default</b>: latin1<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of the map used to define the pairs of characters that
+    form composite characters with the <i>Compose</i> key.
+    The definition of compose map <i>foo</i> is the resource
+    <a href=#composeMap.foo>x3270.composeMap.<i>foo</i></a>.
+</p>
+<a name="composeMap.foo"></a>
+<b>Name:</b> x3270.composeMap.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    An individual compose map definition.
+    Each line in the resource is of the form:
+<pre>
+         keysym1 + keysym2 = keysym3
+</pre>
+<p class=indented>
+    meaning "when the </i>Compose</i> key is pressed,
+    followed by keysym1 and keysym2 (in either order), interpret it as
+    keysym3."  The definitions are case-sensitive.
+</p>
+<a name="confDir"></a>
+<b>Name:</b> x3270.confDir<br>
+<b>Type</b>: String<br>
+<b>Default</b>: /usr/local/etc/x3270<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the x3270 configuration directory, where x3270 will search for the
+    <b>ibm_hosts</b> file by default.  (See <a href=#hostsFile>x3270.hostsFile</a>.)
+</p>
+<a name="connectFileName"></a>
+<b>Name:</b> x3270.connectFileName<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ~/.x3270connect<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of the file to store the recently-connected
+    host list in.  If given the value <b>none</b>, no file will be read or
+    written.  Note that by default, this file is shared among all instances
+    of x3270 that run under the same username.
+</p>
+<a name="crosshair"></a>
+<b>Name:</b> x3270.crosshair<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set crosshair
+, -clear crosshair
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Crosshair Cursor<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to display a crosshair over the
+    cursor: lines extending with height and width of the screen.
+</p>
+<a name="cursorBlink"></a>
+<b>Name:</b> x3270.cursorBlink<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set cursorBlink
+, -clear cursorBlink
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Blinking Cursor<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to use a blinking cursor.
+</p>
+<a name="cursorColor"></a>
+<b>Name:</b> x3270.cursorColor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: red<br>
+<b>Description</b>:<br>
+<p class=indented>    On color X11 displays, this is the color of the text cursor.  This resource
+    is used only if <a href=#useCursorColor>x3270.useCursorColor</a> is true.
+</p>
+<a name="cursorPos"></a>
+<b>Name:</b> x3270.cursorPos<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -set cursorPos
+, -clear cursorPos
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Track Cursor<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to display the cursor location in the OIA
+    (the status line).
+</p>
+<a name="dbcsCgcsgid"></a>
+<b>Name:</b> x3270.dbcsCgcsgid<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the compiled-in value of the CGCSGID for the current host
+    character set, which will be reported to the host in response to a
+    Query(Character Sets).  The value is an integer, which can be prefixed with
+    '0x' to be in hexadecimal.  The upper 16 bits are the GCSGID (character
+    set) and the lower 16 bits are the CPGID (code page).  This value
+    applies only to the double-byte (DBCS) character set.  Use
+    <a href=#sbcsCgcsgid>x3270.sbcsCgcsgid</a> for the single-byte (SBCS) character set.
+</p>
+<a name="debugTracing"></a>
+<b>Name:</b> x3270.debugTracing<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, options are available on the <b>File</b> menu
+    to trace the 3270 data stream and X11 events.  If false, these
+    options are not displayed.
+</p>
+<a name="dftBufferSize"></a>
+<b>Name:</b> x3270.dftBufferSize<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 4096<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#ftBufferSize>x3270.ftBufferSize</a></i>
+    <p class=indented>
+    Specifies the default buffer size for DFT IND$FILE file transfers.  This
+    value can be overridden in the File Transfer dialog and by a parameter to
+    the <b>Transfer</b> action.
+</p>
+<a name="devName"></a>
+<b>Name:</b> x3270.devName<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -devname
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the device name (workstation ID) sent in response to a TELNET
+    NEW-ENVIRON sub-negotiation request, used by iSeries hosts (RFC 4777).
+</p>
+<a name="disconnectClear"></a>
+<b>Name:</b> x3270.disconnectClear<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will clear the screen when a host disconnects.
+</p>
+<a name="doConfirms"></a>
+<b>Name:</b> x3270.doConfirms<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will display a pop-up to report successful
+    completion of certain operations, such as screen printing.  When
+    false, these pop-ups are not displayed.
+</p>
+<a name="dsTrace"></a>
+<b>Name:</b> x3270.dsTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -trace 
+, -set dsTrace
+, -clear dsTrace
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#trace>x3270.trace</a></i>
+    <p class=indented>
+    When true, x3270 writes a hexadecimal representation of all network
+    traffic (and its interpretation) into a file, which defaults to
+    <b>x3trc.<i>pid</i></b>.
+    It also pops up a window to watch the file as it
+    is created, with the pathname of the file as the window title.
+    The command run in the window is defined by <a href=#traceCommand>x3270.traceCommand</a>.
+    The directory where the file is written is defined by <a href=#traceDir>x3270.traceDir</a>.
+    If <a href=#traceFile>x3270.traceFile</a> is defined, it gives the entire pathname
+    and <a href=#traceDir>x3270.traceDir</a> is ignored.
+</p>
+<a name="emulatorFont"></a>
+<b>Name:</b> x3270.emulatorFont<br>
+<b>Type</b>: String<br>
+<b>Default</b>: 3270<br>
+<b>Command Line</b>: -efont
+<br>
+<b>Option</b>: Options -&gt; Font<br>
+<b>Description</b>:<br>
+<p class=indented>    The font used for the emulator window.  By default it is <b>3270</b>,
+    a 14-pixel
+    clone of a real 3278 display font.  Other 3270-specific fonts are
+    available in 8-, 12-, 16-, 24- and 32-pixel sizes.
+    Any standard X11 constant-spaced font can also be used, provided that
+    it implements a display character set compatible with the host code page
+    (<a href=#charset>x3270.charset</a>).  However, the special
+    OIA (status line) symbols are only available with the 3270 fonts.
+</p>
+<a name="eof"></a>
+<b>Name:</b> x3270.eof<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^D<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when x3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard causes
+    the current line of
+    input to be forwarded to the host without a trailing CR/LF sequence.
+    <p class=indented>
+</p>
+<a name="erase"></a>
+<b>Name:</b> x3270.erase<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^?<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class="indented">
+    When connected in line-at-a-time mode (x3270 gathers a line of input
+    before forwarding it ot the host), entering this character at the keyboard
+    will cause x3270 to discard the last character on the input line.
+    <p class="indented">
+    When connected in character-at-a-time mode (x3270 sends each keystroke
+    to the host as it is entered), this is the character that will be sent
+    to the host by the <b>Erase</b> action.
+</p>
+<a name="eventTrace"></a>
+<b>Name:</b> x3270.eventTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set eventTrace
+, -clear eventTrace
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#trace>x3270.trace</a></i>
+    <p class=indented>
+    When true, x3270 traces information about keyboard and mouse
+    events into a file.
+    The default file name is
+    <b>x3trc.<i>pid</i></b>.
+    It also pops up a
+    window to watch the file as it is created, with the pathname of the file
+    as the window title.
+    The command run in the window is defined by <a href=#traceCommand>x3270.traceCommand</a>.
+    The directory where the file is written is defined by <a href=#traceDir>x3270.traceDir</a>.
+    If <a href=#traceFile>x3270.traceFile</a> is defined, it gives the entire pathname
+    and <a href=#traceDir>x3270.traceDir</a> is ignored.
+</p>
+<a name="extended"></a>
+<b>Name:</b> x3270.extended<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -extended
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#model>x3270.model</a> syntax</i>
+    <p class="indented">
+    Indicates support for the 3270 Extended Data Stream.
+</p>
+<a name="fixedSize"></a>
+<b>Name:</b> x3270.fixedSize<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies a fixed size for the x3270 display window.
+    If set, x3270 will not allow its window to be resized by the window manager.
+    The syntax is <b><i>width</i>x<i>height</i></b>.
+    The 3270 display screen will float in the center of the window if necessary.
+</p>
+<a name="foreground"></a>
+<b>Name:</b> x3270.foreground<br>
+<b>Type</b>: String<br>
+<b>Default</b>: black<br>
+<b>Command Line</b>: -fg
+, -rv
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The foreground color for menus, buttons, and on monochrome X11 displays, the
+    emulator display.
+</p>
+<a name="ftAllocation"></a>
+<b>Name:</b> x3270.ftAllocation<br>
+<b>Type</b>: String<br>
+<b>Default</b>: default<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default allocation type for files sent to TSO hosts by IND$FILE
+    file transfers.
+    Possible values are default, which lets the host decide the allocation
+    type, or tracks, cylinders, or avblock.
+</p>
+<a name="ftAvblock"></a>
+<b>Name:</b> x3270.ftAvblock<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default AVBOCK (average block) allocation size for files sent
+    to TSO hosts by IND$FILE file transfers.
+</p>
+<a name="ftBlksize"></a>
+<b>Name:</b> x3270.ftBlksize<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default block size for files sent to TSO hosts by IND$FILE
+    file transfers.
+</p>
+<a name="ftBufferSize"></a>
+<b>Name:</b> x3270.ftBufferSize<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 4096<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the default buffer size for DFT IND$FILE file transfers.  This
+    value can be overridden in the File Transfer dialog and by a parameter to
+    the <b>Transfer</b> action.
+</p>
+<a name="ftCr"></a>
+<b>Name:</b> x3270.ftCr<br>
+<b>Type</b>: String<br>
+<b>Default</b>: auto<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default action for line separators (carriage returns and line
+    feeds) in ASCII files during IND$FILE file transfers.
+    The value can be auto, which will add them when files are received from the
+    host and remove them when they are sent to the host, add (same as auto),
+    remove (same as auto), or keep, meaning no special processing is done.
+</p>
+<a name="ftDirection"></a>
+<b>Name:</b> x3270.ftDirection<br>
+<b>Type</b>: String<br>
+<b>Default</b>: receive<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default IND$FILE file transfer direction, from the perspective
+    of the workstation.
+    The value can be either send (send file from workstation to host) or
+    receive (receive file from host to workstation).
+</p>
+<a name="ftExist"></a>
+<b>Name:</b> x3270.ftExist<br>
+<b>Type</b>: String<br>
+<b>Default</b>: keep<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default behavior for IND$FILE file transfers when the
+    destination file already exists.
+    The value keep means that the transfer will be
+    aborted (or if invoked interactively, the user will be prompted to confirm
+    the file is to be overwritten),
+    replace means that the file will be overwritten unconditionally, and
+    append means that the new file will be appended to the old file.
+</p>
+<a name="ftHost"></a>
+<b>Name:</b> x3270.ftHost<br>
+<b>Type</b>: String<br>
+<b>Default</b>: tso<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default host type for IND$FILE file transfers.
+    The value can be vm, tso or cics.
+</p>
+<a name="ftHostFile"></a>
+<b>Name:</b> x3270.ftHostFile<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default host file name for IND$FILE file transfers.
+</p>
+<a name="ftLocalFile"></a>
+<b>Name:</b> x3270.ftLocalFile<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default local file name for IND$FILE file transfers.
+</p>
+<a name="ftLrecl"></a>
+<b>Name:</b> x3270.ftLrecl<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default logical record length for files sent to the host via
+    IND$FILE.
+</p>
+<a name="ftMode"></a>
+<b>Name:</b> x3270.ftMode<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ascii<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default mode for IND$FILE file transfers: ascii (text, with
+    translation between the workstation's code page and EBCDIC), or binary (no
+    translation).
+</p>
+<a name="ftPrimarySpace"></a>
+<b>Name:</b> x3270.ftPrimarySpace<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default primary space allocation for files sent to TSO hosts
+    via IND$FILE.
+</p>
+<a name="ftRecfm"></a>
+<b>Name:</b> x3270.ftRecfm<br>
+<b>Type</b>: String<br>
+<b>Default</b>: default<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default record format for files sent to the host using
+    IND$FILE.
+    Possibe values are default, fixed, variable, and undefined.
+    The default value of 'default' lets IND$FILE choose an appropriate format.
+</p>
+<a name="ftRemap"></a>
+<b>Name:</b> x3270.ftRemap<br>
+<b>Type</b>: String<br>
+<b>Default</b>: yes<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default mapping behavior for ASCII files transferred with
+    IND$FILE.
+    When set to yes, ASCII files are translated by
+    x3270 to produce as accurate a mapping as possible between the workstation's
+    code page and the host's EBCDIC code page. When set to no, only the fixed
+    translation built into the IND$FILE application is run, which (roughly)
+    maps ISO 8859-1 to host code page 37.
+</p>
+<a name="ftSecondarySpace"></a>
+<b>Name:</b> x3270.ftSecondarySpace<br>
+<b>Type</b>: Integer<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the default secondary space allocation for files sent to TSO hosts
+    via IND$FILE.
+</p>
+<a name="highlightBold"></a>
+<b>Name:</b> x3270.highlightBold<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, highlighted fields will be displayed in bold.  If
+    false, highlighted fields will be displayed in the normal
+    font.
+</p>
+<a name="hostname"></a>
+<b>Name:</b> x3270.hostname<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of the host to connect to.  The name can include the usual
+    options (prefixes to specify special connection options, LU names, and
+    port).  A hostname specified on the command line takes precedence over
+    <a href=#hostname>x3270.hostname</a>.
+    <p class=indented>
+    The most common use of <a href=#hostname>x3270.hostname</a> is in <i>session files</i>, where a
+    file is used to pass all of the options to establish a x3270 session.
+</p>
+<a name="hostsFile"></a>
+<b>Name:</b> x3270.hostsFile<br>
+<b>Type</b>: String<br>
+<b>Default</b>: /usr/local/etc/x3270/ibm_hosts<br>
+<b>Description</b>:<br>
+<p class=indented>    The pathname of a file listing the host names that appear on the
+    <b>File -&gt; Connect</b> menu.
+    The file can also be used to create hostname aliases and to define a set
+    of actions to perform when connecting to a host.
+    <p class="indented">
+    The format of the file is explained on the <i>ibm_hosts</i> manual page.
+    The default pathname is actually <b>ibm_hosts</b> in the directory
+    defined by <a href=#confDir>x3270.confDir</a>.
+</p>
+<a name="httpd"></a>
+<b>Name:</b> x3270.httpd<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -httpd
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the TCP port and optional address to listen on for HTTP
+    connections. (x3270 implements a simple REST API and a set of HTML objects
+    for access by scripts.) The syntax of this resource is
+    [<i>address</i>:]<i>port</i>, where <i>address</i> is an IPv4 or IPv6
+    address such as <b>127.0.0.1</b> or <b>0.0.0.0</b>, and <i>port</i> is a
+    TCP port such as <b>4080</b>. The address can also be specified as <b>*</b>
+    to indicate <b>0.0.0.0</b>. A numeric IPv6 address must be enclosed in
+    square brackets, e.g., <b>[1234:5678::3]</b>, to avoid ambiguity between
+    the colons inside the address and the colon separating the address from the
+    port. If no address is specified, it defaults to <b>127.0.0.1</b>.
+</p>
+<a name="iconFont"></a>
+<b>Name:</b> x3270.iconFont<br>
+<b>Type</b>: String<br>
+<b>Default</b>: nil2<br>
+<b>Description</b>:<br>
+<p class=indented>    The font used to paint the text inside the active icon (see <a href=#activeIcon>x3270.activeIcon</a>).
+    The default of <b>nil2</b> is a one-by-two pixel font that produces a
+    "greeked" picture of the screen image.
+</p>
+<a name="iconLabelFont"></a>
+<b>Name:</b> x3270.iconLabelFont<br>
+<b>Type</b>: String<br>
+<b>Default</b>: 8x13<br>
+<b>Description</b>:<br>
+<p class=indented>    When <a href=#activeIcon>x3270.activeIcon</a> and <a href=#labelIcon>x3270.labelIcon</a> are true, this is the
+    name of the font used to paint the icon label.
+</p>
+<a name="icrnl"></a>
+<b>Name:</b> x3270.icrnl<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    It controls whether input carriage returns are mapped to newlines.
+</p>
+<a name="idleCommand"></a>
+<b>Name:</b> x3270.idleCommand<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    When <a href=#idleCommand>x3270.idleCommand</a> is defined, it specifies a command to execute after a
+    period of keyboard inactivity (no AID keys pressed).
+    The <a href=#idleCommand>x3270.idleCommand</a> can be an arbitrary sequence of x3270 actions, but it
+    should include an action which generates an AID (<b>Enter</b>, <b>Clear</b>,
+    <b>PF</b> or <b>PA</b>).
+    <a href=#idleCommandEnabled>x3270.idleCommandEnabled</a> must be true in order for the
+    <a href=#idleCommand>x3270.idleCommand</a> to take effect. (This is so an idle command can be defined,
+    but needs to be enabled explicitly at some point after login.)
+    <a href=#idleTimeout>x3270.idleTimeout</a> specifies the inactivity interval.
+</p>
+<a name="idleCommandEnabled"></a>
+<b>Name:</b> x3270.idleCommandEnabled<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    Controls whether <a href=#idleCommand>x3270.idleCommand</a> has effect as soon as a host session
+    is established.  (This is so an idle command can be defined, but needs to
+    be explicitly enabled at some point after login.)
+</p>
+<a name="idleTimeout"></a>
+<b>Name:</b> x3270.idleTimeout<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ~7m<br>
+<b>Description</b>:<br>
+<p class=indented>    The timeout value for <a href=#idleCommand>x3270.idleCommand</a>.
+    If the value ends in <b>h</b>, it specifies hours; if it ends in
+    <b>m</b> it specifies minutes; if it ends in <b>s</b> or does not have
+    an alphanumeric suffix, it specifies seconds.
+    <p class="indented">
+    If the value begins with a tilde <b>~</b>, the time will be randomly
+    varied +/-10% from the value specified.
+</p>
+<a name="inlcr"></a>
+<b>Name:</b> x3270.inlcr<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    It controls whether input newlines are mapped to carriage returns.
+</p>
+<a name="inputColor"></a>
+<b>Name:</b> x3270.inputColor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: green<br>
+<b>Description</b>:<br>
+<p class=indented>    This resource defines the color used to display light-pen selectable
+    text in 3278 (monochrome) emulation mode.
+    <p class=indented>
+    Previous versions of x3270 implemented something called <i>pseudo-color
+    mode</i>, where a monochrome (3278) terminal was emulated with various
+    colors assigned to different kinds of fields.
+    To emulate pseudo-color mode with the current version of x3270, select 3278
+    emulation with <a href=#model>x3270.model</a>, set <a href=#inputColor>x3270.inputColor</a> to <b>orange</b> and set
+    <a href=#boldColor>x3270.boldColor</a> to <b>cyan</b>.
+    <p class=indented>
+    If the resource <a href=#modifiedSel>x3270.modifiedSel</a> is true, modified fields
+    are also displayed using <a href=#inputColor>x3270.inputColor</a>.
+</p>
+<a name="inputMethod"></a>
+<b>Name:</b> x3270.inputMethod<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -im
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the name of the multi-byte input method.  The
+    default is specified by the XMODIFIERS environment variable, if set, or
+    will be constructed by Xlib based on the current locale.
+</p>
+<a name="intr"></a>
+<b>Name:</b> x3270.intr<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^C<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When this character is typed on the keyboard, the TELNET IP
+    (Interrupt Process) sequence is sent to the host.
+</p>
+<a name="invertKeypadShift"></a>
+<b>Name:</b> x3270.invertKeypadShift<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes the PF1-PF12 and PF13-PF24 keys on the
+    pop-up keypad to be swapped.  Normally, the low-numbered keys appear;
+    when Shift, Alt, Ctrl or Meta is pressed, the high-numbered keys appear.
+    With this resource true, that is reversed.
+</p>
+<a name="keyFile"></a>
+<b>Name:</b> x3270.keyFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keyfile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the name of a file containg the private key for the certificate
+    specified by <a href=#certFile>x3270.certFile</a> or <a href=#chainFile>x3270.chainFile</a>.  The default file type is PEM;
+    it can be overridden by <a href=#keyFileType>x3270.keyFileType</a>.  If the private key is encrypted,
+    the password is specified by <a href=#keyPasswd>x3270.keyPasswd</a>.
+</p>
+<a name="keyFileType"></a>
+<b>Name:</b> x3270.keyFileType<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pem<br>
+<b>Command Line</b>: -keyfileType
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the type of the private key file specified by <a href=#keyFile>x3270.keyFile</a>.
+    The value can be <b>pem</b> or <b>asn1</b>.
+</p>
+<a name="keyHeight"></a>
+<b>Name:</b> x3270.keyHeight<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 24<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the height of the keys on the pop-up keypad.
+</p>
+<a name="keymap"></a>
+<b>Name:</b> x3270.keymap<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keymap
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the keyboard map to use.
+    It can be a single keymap name or a comma-separated list of keymaps,
+    which will be applied in order.
+    <p class=indented>
+    Each keymap can optionally be defined in three separate parts: a common
+    keymap, which is applied at all times, an NVT-mode keymap, which is
+    applied only in NVT mode, and a 3270-mode keymap, which is only applied
+    in 3270 mode.
+    The NVT-mode keymap has the same name as the common keymap, with the
+    suffix <b>.nvt</b> appended.
+    The 3270-mode keymap has the suffix <b>.3270</b> appended.
+    Thus specifying a <a href=#keymap>x3270.keymap</a> value of <i>foo</i> implies the use of
+    three different keymaps (if found): <b>foo</b>, <b>foo.nvt</b> and
+    <b>foo.3270</b>.
+    <p class=indented>
+    After that, the string <b>.user</b>
+    is appended to the keymap name and three more keymaps are searched
+    for: <b>foo.user</b>, <b>foo.user.nvt</b> and <b>foo.user.3270</b>,
+    for a total of six.
+    <p class=indented>
+    If no <a href=#keymap>x3270.keymap</a> is defined, the environment variables $KEYMAP and
+    $KEYBD are checked, in that order, for the name.
+    <a href=#keymap>x3270.keymap</a> is only the name; the keymap definition for name
+    <i>foo</i> is the resource <a href=#keymap.foo>x3270.keymap.<i>foo</i></a>.
+</p>
+<a name="keymap.foo"></a>
+<b>Name:</b> x3270.keymap.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    The definition of keymap <i>foo</i>.
+    Please refer to the <i>How To Create a Custom Keymap</i> document for a
+    full description of the syntax.
+</p>
+<a name="keypad"></a>
+<b>Name:</b> x3270.keypad<br>
+<b>Type</b>: String<br>
+<b>Default</b>: right<br>
+<b>Description</b>:<br>
+<p class=indented>    This controls the position of the pop-up keypad.  It can have one of
+    five values:
+    <ul>
+    <li><b>left</b>, a pop-up window positioned to the left
+    of the main x3270 window</li>
+    <li><b>right</b>, a pop-up window positioned
+    to the right of the main x3270 window</li>
+    <li><b>bottom</b>, a pop-up window positioned below
+    the main x3270 window</li>
+    <li><b>integral</b>, making the keypad an extension of the
+    bottom of the main window itself</li>
+    <li><b>insideRight</b>, placing the keypad
+    over the upper-right corner of the emulator window, just below the keypad
+    button on the menu bar</li>
+    </ul>
+</p>
+<a name="keypad.keyHeight"></a>
+<b>Name:</b> x3270.keypad.keyHeight<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 24<br>
+<b>Description</b>:<br>
+<p class=indented>    The height in pixels of all of the buttons on the keypad.
+</p>
+<a name="keyPasswd"></a>
+<b>Name:</b> x3270.keyPasswd<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -keypasswd
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Gives the password for the private key file specified by <a href=#keyFile>x3270.keyFile</a>, if it
+    is encrypted.
+    The value can take one of two forms. <b>file</b>:<i>filename</i> specifies
+    that the password is in a file. <b>string</b>:<i>string</i> gives the
+    password value in the resource itself.
+</p>
+<a name="keyWidth"></a>
+<b>Name:</b> x3270.keyWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 48<br>
+<b>Description</b>:<br>
+<p class=indented>    The width in pixels of the lower tier of buttons on a horizontal keypad.
+</p>
+<a name="keypad.largeKeyWidth"></a>
+<b>Name:</b> x3270.keypad.largeKeyWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 56<br>
+<b>Description</b>:<br>
+<p class=indented>    The width in pixels of the lower tier of buttons on a vertical keypad.
+</p>
+<a name="keypad.paWidth"></a>
+<b>Name:</b> x3270.keypad.paWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 36<br>
+<b>Description</b>:<br>
+<p class=indented>    The width in pixels of PA and cursor keys on the keypad.
+</p>
+<a name="keypad.pfWidth"></a>
+<b>Name:</b> x3270.keypad.pfWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 32<br>
+<b>Description</b>:<br>
+<p class=indented>    The width in pixels of PF keys on the keypad.
+</p>
+<a name="keypadBackground"></a>
+<b>Name:</b> x3270.keypadBackground<br>
+<b>Type</b>: String<br>
+<b>Default</b>: grey70<br>
+<b>Description</b>:<br>
+<p class=indented>    On color X11 displays, this is the color of the empty area behind the
+    buttons on the main window and keypad window.  On monochrome X11 displays,
+    these areas are filled with a 50% grey bitmap.
+</p>
+<a name="keypadOn"></a>
+<b>Name:</b> x3270.keypadOn<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, the keypad will automatically appear when x3270 is
+    started.
+</p>
+<a name="kill"></a>
+<b>Name:</b> x3270.kill<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^U<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when x3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard causes
+    the current input line to be erased.
+    <p class=indented>
+    When connected in character-at-a-time mode (when x3270 sends each
+    keystroke to the host), this is the ASCII character that is sent to
+    the host by the <b>DeleteField</b>
+    action.
+</p>
+<a name="labelIcon"></a>
+<b>Name:</b> x3270.labelIcon<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When <a href=#activeIcon>x3270.activeIcon</a> is true, the <i>twm</i> window manager will
+    not put a label on x3270's icon.
+    Setting <a href=#labelIcon>x3270.labelIcon</a> to true causes
+    x3270 to supply its own label for the icon.
+    <p class=indented>
+    The icon label is drawn using the font specified by <a href=#iconLabelFont>x3270.iconLabelFont</a>.
+</p>
+<a name="largeKeyWidth"></a>
+<b>Name:</b> x3270.largeKeyWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 56<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the width of the "large" keys in the lower section of the pop-up
+    keypad.
+</p>
+<a name="lineWrap"></a>
+<b>Name:</b> x3270.lineWrap<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -set lineWrap
+, -clear lineWrap
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Wraparound<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode.
+    When true, x3270 will automatically insert a 
+    CR/LF sequence when output reaches the end of a line.  When false,
+    output will pile up at the end of each line until the host sends a
+    CR/LF sequence.
+</p>
+<a name="loginMacro"></a>
+<b>Name:</b> x3270.loginMacro<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -loginmacro
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a sequence of commands to run as soon as a host connection is
+    established.  Usually these would be commands used to navigate through
+    login screens, such <b>String</b>, <b>Tab</b> and <b>Enter</b>.
+    <p class=indented>
+    If a <a href=#hostsFile>x3270.hostsFile</a> is in use and a matching entry is found, the login
+    macro from that entry will be used in preference to the <a href=#loginMacro>x3270.loginMacro</a>.
+</p>
+<a name="lnext"></a>
+<b>Name:</b> x3270.lnext<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^V<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    <p class=indented>
+    When connected in line-at-a-time mode (when x3270 gathers a line of input
+    before forwarding it to the host), entering this character at the
+    keyboard removes any special meaning from the next character entered.
+</p>
+<a name="lockedCursor"></a>
+<b>Name:</b> x3270.lockedCursor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: X_cursor<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the mouse cursor displayed with x3270 is not connected to a
+    host.
+</p>
+<a name="m3279"></a>
+<b>Name:</b> x3270.m3279<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Command Line</b>: -color
+<br>
+<b>Description</b>:<br>
+<p class=indented>    <i>Deprecated resource -- replaced by <a href=#model>x3270.model</a> syntax</i>
+    <p class=indented>
+    Indicates support for color (a 3279 terminal).
+</p>
+<a name="macros"></a>
+<b>Name:</b> x3270.macros<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a set of macros assigned to the <b>Macros</b> menu that appears
+    when connected to a host.
+    The syntax is similar to a keymap (an X11 translation
+    table), except that rather than a keysym name, the left-hand side is a
+    name that will appear on the menu.  A list of actions can be specified
+    on the right-hand side.
+    <p class=indented>
+    <a href=#macros>x3270.macros</a> defines a set of macros for all hosts.
+    To specify a set of macros for host <i>foo</i>, use <a href=#macros.foo>x3270.macros.<i>foo</i></a>.
+</p>
+<a name="macros.foo"></a>
+<b>Name:</b> x3270.macros.<i>foo</i><br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a set of macros assigned to the <b>Macros</b> menu that appears
+    when connected to host <i>foo</i>.
+    It overrides the contents of <a href=#macros>x3270.macros</a>.
+    See <a href=#macros>x3270.macros</a> for details on its syntax.
+</p>
+<a name="marginedPaste"></a>
+<b>Name:</b> x3270.marginedPaste<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set marginedPaste
+, -clear marginedPaste
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Paste With Left Margin<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will use the current cursor position as a
+    left margin for pasted data: no pasted data will be input into an area to
+    the left of the current cursor positon.
+</p>
+<a name="maxRecent"></a>
+<b>Name:</b> x3270.maxRecent<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 5<br>
+<b>Description</b>:<br>
+<p class=indented>    The maximum number of entries in the Connect menu's recent host list.
+</p>
+<a name="menuBar"></a>
+<b>Name:</b> x3270.menuBar<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If false, the menu bar will not be displayed at the top of
+    the x3270 main window.
+    The three pull-down menus are still available,
+    however, by pressing Ctrl and each of the mouse buttons.
+</p>
+<a name="model"></a>
+<b>Name:</b> x3270.model<br>
+<b>Type</b>: String<br>
+<b>Default</b>: 3279-4-E<br>
+<b>Command Line</b>: -model
+<br>
+<b>Option</b>: Options -&gt; Screen Size<br>
+<b>Description</b>:<br>
+<p class=indented>    The terminal model that x3270 is emulating.  The model is in three parts,
+    separated by dashes; each part is optional.
+    <ul>
+	<li>3278 or 3279<br>
+	    3278 specifies a monochrome (green) 3270 display.
+	    If used on a color
+	     X11 display, it will cause all fields to be drawn in green.
+	     3278 is the default for monochrome X11 displays.
+	     <br>
+	    3279 specifies a color 3270 display.
+	    This is the default for color X11 displays.
+	     </li>
+	<li>2, 3, 4 or 5</br>
+	    The model number, which determines the size of the screen.</br>
+	    Model 2 has 24 rows and 80 columns.</br>
+	    Model 3 has 32 rows and 80 columns.</br>
+	    Model 4 has 43 rows and 80 columns.</br>
+	    Model 5 has 27 rows and 132 columns.</br>
+	    The default is
+	     4.
+	     </li>
+	<li>E</br>
+	    An optional suffix which indicates support for the 3270 Extended
+	     Data Stream (color, extended attributes, Query Reply).  3279
+	     implies E.</li>
+	     </ul>
+</p>
+<a name="modifiedSel"></a>
+<b>Name:</b> x3270.modifiedSel<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, modified fields are displayed in a different
+    color than other modifiable fields.
+    In 3278 mode, this color is the "input" (light pen selectable) color,
+    defined by <a href=#inputColor>x3270.inputColor</a>.
+    In 3279 mode, this is the color whose index is defined by
+    <a href=#modifiedSelColor>x3270.modifiedSelColor</a>.
+    When <a href=#modifiedSel>x3270.modifiedSel</a> is false,
+    modified fields are displayed in the same colors as unmodified fields.
+</p>
+<a name="modifiedSelColor"></a>
+<b>Name:</b> x3270.modifiedSelColor<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 10<br>
+<b>Description</b>:<br>
+<p class=indented>    In 3279 mode, when <a href=#modifiedSel>x3270.modifiedSel</a> is true,
+    this is index of the host color used to display modified fields.
+    The default value of 10 corresponds to "orange".
+    (See <a href=#colorSchemes>x3270.colorSchemes</a> for the host color index definitions.)
+</p>
+<a name="mono"></a>
+<b>Name:</b> x3270.mono<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -mono
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will operate as if it were running on a
+    monochrome X11 display.
+</p>
+<a name="monoCase"></a>
+<b>Name:</b> x3270.monoCase<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set monoCase
+, -clear monoCase
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Monocase<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to run in uppercase-only mode.
+</p>
+<a name="newEnviron"></a>
+<b>Name:</b> x3270.newEnviron<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will respond to the TELNET NEW-ENVIRONMENT option. If false,
+    it will not.
+</p>
+<a name="noOther"></a>
+<b>Name:</b> x3270.noOther<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, the "Other" options are disabled for selecting
+    fonts and connecting to hosts, limiting users to the options provided on
+    the menus.
+</p>
+<a name="normalCursor"></a>
+<b>Name:</b> x3270.normalCursor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: top_left_arrow<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the mouse cursor that x3270 uses when it is connected to a host, not
+    waiting for the host to complete a command, and the keyboard is not
+    locked.
+</p>
+<a name="normalColor"></a>
+<b>Name:</b> x3270.normalColor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: green<br>
+<b>Description</b>:<br>
+<p class=indented>    On color X11 displays in 3278 mode, this is the color of normal-intensity
+    text.  On monochrome X11 displays, normal text uses the foreground color.
+</p>
+<a name="numericLock"></a>
+<b>Name:</b> x3270.numericLock<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to lock the keyboard when non-numeric data
+    is entered into fields with the Numeric attribute.
+</p>
+<a name="nvtMode"></a>
+<b>Name:</b> x3270.nvtMode<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -nvt
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, causes x3270 to start immediately in NVT mode and allow keyboard
+    input immediately, instead of waiting for the host to send data or
+    negotiate 3270 mode. It also causes the default terminal type to be
+    <b>xterm</b>.
+</p>
+<a name="onlcr"></a>
+<b>Name:</b> x3270.onlcr<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    Used only in NVT line-at-a-time mode; similar to the <i>stty</i> parameter
+    of the same name.
+    It controls whether output newlines are mapped to CR/LF sequences.
+</p>
+<a name="oerrLock"></a>
+<b>Name:</b> x3270.oerrLock<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, operator errors (typing into protected fields,
+    insert overflow, etc.) will cause the keyboard to lock with an error
+    message in the OIA (status line).  If false, these
+    errors will simply cause the terminal bell will ring, without any
+    keyboard lock or message.
+</p>
+<a name="once"></a>
+<b>Name:</b> x3270.once<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -once
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will exit as soon as a host disconnects.
+    The default is <b>false</b> if no hostname is specified on the command
+    line or in a session file,
+    <b>true</b> otherwise.
+</p>
+<a name="overlayPaste"></a>
+<b>Name:</b> x3270.overlayPaste<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set overlayPaste
+, -clear overlayPaste
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Overlay Paste<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, the <b>Paste</b> action will overlay protected fields,
+    instead of locking the keyboard and stopping. This means that when the
+    cursor is on a protected field, a displayable character read from the paste
+    buffer will simply cause the cursor to advance to the right; the actual
+    character is ignored. This allows regions of the screen that include
+    protected fields to be copied and pasted back into a formatted screens that
+    include the same protected fields (i.e., a form).
+    <p class="indented">
+    Note: Setting overlayPaste to <b>true</b> will cause x3270 to act as if the
+    <a href=#marginedPaste>x3270.marginedPaste</a> toggle were also set.
+</p>
+<a name="oversize"></a>
+<b>Name:</b> x3270.oversize<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -oversize
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Sets the screen dimensions to be larger than the default for the
+    chosen model.  Its value is a string in the format
+    <b><i>cols</i>x<i>rows</i></b>.
+    It is used only if the <a href=#model>x3270.model</a> includes the "-E" (extended
+    data stream) suffix, and only if the specified dimensions are larger than
+    the model number defaults.  Also, only hosts that support the Query Reply
+    structured field will function properly with x3270 in this mode.
+</p>
+<a name="paWidth"></a>
+<b>Name:</b> x3270.paWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 36<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the width of the PA keys in the lower section of the pop-up
+    keypad.
+</p>
+<a name="pfWidth"></a>
+<b>Name:</b> x3270.pfWidth<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 32<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the width of the PF keys on the pop-up keypad.
+</p>
+<a name="port"></a>
+<b>Name:</b> x3270.port<br>
+<b>Type</b>: String<br>
+<b>Default</b>: telnet<br>
+<b>Command Line</b>: -port
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the default TCP port for x3270 to connect to.  This can be
+    either a symbolic name from /etc/services, or an integer.
+</p>
+<a name="proxy"></a>
+<b>Name:</b> x3270.proxy<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -proxy
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines a proxy server that x3270 will use to connect to hosts.
+    The value is of the form
+    <b><i>type</i>:<i>server</i></b>[<b>:<i>port</i></b>],
+    where options for <i>type</i> are described on the x3270 manual page.
+</p>
+<a name="preeditType"></a>
+<b>Name:</b> x3270.preeditType<br>
+<b>Type</b>: String<br>
+<b>Default</b>: OverTheSpot+1<br>
+<b>Command Line</b>: -pt
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The preedit type for the multi-byte input method.  Valid values are
+    <b>OverTheSpot</b>, <b>OffTheSpot</b>, <b>Root</b> and
+    <b>OnTheSpot</b>.  The value for
+    <b>OverTheSpot</b> can include an optional suffix, a signed number
+    indicating the vertical distance in rows of the preedit window from the
+    cursor position, e.g. <b>OverTheSpot+1</b> or <b>OverTheSpot-2</b>.
+</p>
+<a name="printerLu"></a>
+<b>Name:</b> x3270.printerLu<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -printerlu
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If a value is set, x3270 will automatically start a
+    pr3287
+    printer session
+    when a host connection is established.
+    If the value is "<b>.</b>", the
+    pr3287
+    session will
+    be associated with the interactive terminal session (this requires that
+    the host supports TN3270E).  Otherwise, the value is taken as the LU
+    name to associate with the printer session.
+</p>
+<a name="printer.assocCommandLine"></a>
+<b>Name:</b> x3270.printer.assocCommandLine<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pr3287 -assoc %L% -command %C% %R% %P% %V% %S% %O% %H%<br>
+<b>Description</b>:<br>
+<p class=indented>    <i><b>Note:</b> This resource is for debug purposes only. To add optional
+    parameters to the wc3270 command line, use <a href=#printer.options.>x3270.printer.options.</a></i>
+    <p class="indented">
+    The shell command to use to start a printer session, when associated with
+    the current TN3270E session LU (when <a href=#printerLU>x3270.printerLU</a> is "<b>.</b>").
+    Within the string, the following substitutions
+    are made:
+    <ul>
+	<li><b>%C%</b> is replaced with the <a href=#printer.command>x3270.printer.command</a></li>
+	<li><b>%H%</b> is replaced with the current host name</li>
+	<li><b>%L%</b> is replaced with the current session's LU</li>
+	<li><b>%O%</b> is replaced with the value of <a href=#printer.options>x3270.printer.options</a></li>
+	<li><b>%P%</b> is replaced with the current session's proxy option (<a href=#proxy>x3270.proxy</a>)</li>
+	<li><b>%R%</b> is replaced with an option to pass the current character set</li>
+	<li><b>%S%</b> is replaced with an option to pass the port of the sync socket</li>
+	<li><b>%V%</b> is replaced with SSL-related options</li>
+    </ul>
+</p>
+<a name="printer.command"></a>
+<b>Name:</b> x3270.printer.command<br>
+<b>Type</b>: String<br>
+<b>Default</b>: lpr<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the command supplied to the "-command" option of the pr3287
+    program to print each job.  This is the text which is substituted for
+    <b>%C</b> in <a href=#printer.assocCommandLine>x3270.printer.assocCommandLine</a> and <a href=#printer.luCommandLine>x3270.printer.luCommandLine</a>
+    resources.
+</p>
+<a name="printer.luCommandLine"></a>
+<b>Name:</b> x3270.printer.luCommandLine<br>
+<b>Type</b>: String<br>
+<b>Default</b>: pr3287 -command %C% %R% %P% %V% %S% %O% %L%@%H%<br>
+<b>Description</b>:<br>
+<p class=indented>    <i><b>Note:</b> This resource is for debug purposes only. To add optional
+    parameters to the wc3270 command line, use <a href=#printer.options.>x3270.printer.options.</a></i>
+    <p class="indented">
+    The shell command to use to start a printer session, when associated with a
+    specific LU.  Within the string, the following substitutions are made:
+    <ul>
+	<li><b>%C%</b> is replaced with <a href=#printer.command>x3270.printer.command</a></li>
+	<li><b>%H%</b> is replaced with the current host name</li>
+	<li><b>%L%</b> is replaced with the LU value entered into the dialog box</li>
+	<li><b>%O%</b> is replaced with the value of <a href=#printer.options>x3270.printer.options</a></li>
+	<li><b>%P%</b> is replaced with current session's proxy option (<a href=#proxy>x3270.proxy</a>)</li>
+	<li><b>%R%</b> is replaced with an option to pass the current character set</li>
+	<li><b>%S%</b> is replaced with an option to pass the port of the sync socket</li>
+	<li><b>%V%</b> is replaced with SSL-related options</li>
+    </ul>
+</p>
+<a name="printer.options"></a>
+<b>Name:</b> x3270.printer.options<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines extra parameters to substutute for the <b>%O%</b> token in the
+    printer command line.
+</p>
+<a name="printTextCommand"></a>
+<b>Name:</b> x3270.printTextCommand<br>
+<b>Type</b>: String<br>
+<b>Default</b>: lpr<br>
+<b>Description</b>:<br>
+<p class=indented>    The shell command used by the <b>PrintText</b> action.  An ASCII image of
+    the 3270 display becomes the standard input to this command.
+    If the first
+    character of the command is '@', the usual pop-up windows before and after
+    the text is printed will not appear.
+</p>
+<a name="printTextScreensPerPage"></a>
+<b>Name:</b> x3270.printTextScreensPerPage<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 1<br>
+<b>Description</b>:<br>
+<p class=indented>    The number of screens to display on a page when tracing screens to the
+    printer.
+</p>
+<a name="printWindowCommand"></a>
+<b>Name:</b> x3270.printWindowCommand<br>
+<b>Type</b>: String<br>
+<b>Default</b>: xwd -id %d | xpr | lpr<br>
+<b>Description</b>:<br>
+<p class=indented>    The shell command used by the <b>PrintWindow</b> action.
+    The X11 window identifier of the main x3270 window is substituted for
+    any <b>%d</b> in the command.
+    If the first character of the command is '<b>@</b>', the usual pop-up
+    windows before and after the window is printed will not appear.
+</p>
+<a name="quit"></a>
+<b>Name:</b> x3270.quit<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^\<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when x3270
+    gathers a line of input before forwarding it to the host),
+    entering this character at the keyboard causes the
+    TELNET BREAK sequence to be sent to the host.
+</p>
+<a name="reconnect"></a>
+<b>Name:</b> x3270.reconnect<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will automatically reconnect to a host after it disconnects.
+</p>
+<a name="rectangleSelect"></a>
+<b>Name:</b> x3270.rectangleSelect<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set rectangleSelect
+, -clear rectangleSelect
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Select by Rectangles<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will always select rectangular areas of the
+    screen.  When false, x3270 will select rectangular areas in 3270
+    mode, but in NVT mode it will select continuous areas of the screen like
+    <i>xterm</i>.
+</p>
+<a name="rprnt"></a>
+<b>Name:</b> x3270.rprnt<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^R<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when x3270
+    gathers a line of input before forwarding it to the host), entering this
+    character at the keyboard causes the current input line to be redisplayed.
+</p>
+<a name="saveLines"></a>
+<b>Name:</b> x3270.saveLines<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 4096<br>
+<b>Command Line</b>: -sl
+<br>
+<b>Description</b>:<br>
+<p class=indented>    The number of display lines to save for the scroll bar. Note that the
+    scroll bar operates on full screens of data, so the value divided by the
+    number of rows on the screen gives you the number of screens that will be
+    saved.
+</p>
+<a name="sbcsCgcsgid"></a>
+<b>Name:</b> x3270.sbcsCgcsgid<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the compiled-in value of the CGCSGID for the current host
+    character set.  The value is an integer, which can be prefixed with '0x'
+    to be in hexadecimal.  The upper 16 bits are the GCSGID (character
+    set) and the lower 16 bits are the CPGID (code page).  This value
+    applies only to the single-byte (SBCS) character set.  Use
+    <a href=#dbcsCgcsgid>x3270.dbcsCgcsgid</a> for the double-byte (DBCS) character set.
+</p>
+<a name="schemeList"></a>
+<b>Name:</b> x3270.schemeList<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    Lists the options on the Color Scheme menu.  Can contain '>' characters to
+    indicate a menu hierarchy. The format of the list is one entry per line,
+    each line containing the menu label, a colon and the name of the color
+    scheme.
+</p>
+<a name="screenTrace"></a>
+<b>Name:</b> x3270.screenTrace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set screenTrace
+, -clear screenTrace
+<br>
+<b>Option</b>: File -&gt; Save Screen(s) in File<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will save an ASCII version of the screen image in
+    a file every time it changes.
+    The file name defaults to
+    <b>x3scr.<i>pid</i></b>.
+    The directory where the file is written is defined by <a href=#traceDir>x3270.traceDir</a>.
+    If <a href=#screenTraceFile>x3270.screenTraceFile</a> is defined, it defines the
+    file name and <a href=#traceDir>x3270.traceDir</a> is ignored.
+</p>
+<a name="screenTraceFile"></a>
+<b>Name:</b> x3270.screenTraceFile<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives the name of the file that screen traces will be
+    written into.
+</p>
+<a name="scripted"></a>
+<b>Name:</b> x3270.scripted<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -script
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will read commands from standard input.  The rules
+    for these commands are documented in the <i>x3270-script</i> manual page.
+</p>
+<a name="scriptPort"></a>
+<b>Name:</b> x3270.scriptPort<br>
+<b>Type</b>: Integer<br>
+<b>Command Line</b>: -scriptport
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, x3270 will accept script connections on the specified local TCP
+    port.
+    The rules for the commands passed over these connections are documented
+    in the <i>x3270-script</i> manual page.
+    The syntax of this resource is [<i>address</i>:]<i>port</i>, where
+    <i>address</i> is an IPv4 or IPv6 address such as <b>127.0.0.1</b> or
+    <b>0.0.0.0</b>, and <i>port</i> is a TCP port such as <b>4081</b>. The
+    address can also be specified as <b>*</b> to indicate <b>0.0.0.0</b>. A
+    numeric IPv6 address must be enclosed in square brackets, e.g.,
+    <b>[1234:5678::3]</b>, to avoid ambiguity between the colons inside the
+    address and the colon separating the address from the port. If no address
+    is specified, it defaults to <b>127.0.0.1</b>.
+</p>
+<a name="scrollBar"></a>
+<b>Name:</b> x3270.scrollBar<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -sb
+, +sb
+, -set scrollBar
+, -clear scrollBar
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will display a scroll bar to the right of the emulator
+    window.
+</p>
+<a name="secure"></a>
+<b>Name:</b> x3270.secure<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will prevent users from executing arbitrary
+    commands from within the program.
+    In particular, the <b>File -&gt; Execute an Action</b> menu option is
+    disabled, as are the pop-ups which allow editing the commands
+    for <b>File -&gt; Print Screen Text</b> and
+    <b>File -&gt; Print Window Bitmap</b>, and
+    <a href=#disconnectClear>x3270.disconnectClear</a> is true.
+    See <a href=#noOther>x3270.noOther</a> and <a href=#suppressActions>x3270.suppressActions</a> for additional security options.
+</p>
+<a name="selectBackground"></a>
+<b>Name:</b> x3270.selectBackground<br>
+<b>Type</b>: String<br>
+<b>Default</b>: dimGrey<br>
+<b>Description</b>:<br>
+<p class=indented>    On color X11 displays, this is the background color used for selected text
+    (text highlighted with the mouse for cut and paste).  On monochrome
+    X11 displays, selected text is in reverse video.
+</p>
+<a name="selfSignedOk"></a>
+<b>Name:</b> x3270.selfSignedOk<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will allow SSL authentication with a host that uses a
+    self-signed certificate.
+</p>
+<a name="showTiming"></a>
+<b>Name:</b> x3270.showTiming<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set showTiming
+, -clear showTiming
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Show Timing<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will display on the OIA (status line) the time
+    that the host takes to unlock the keyboard after an AID is sent.
+</p>
+<a name="socket"></a>
+<b>Name:</b> x3270.socket<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -socket
+<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will create a Unix-domain socket than can be used
+    by an external script to control the session.  The name of the socket is
+    <b>/tmp/x3sck.<i>pid</i></b>.  The <b>-p</b> option of the
+    <i>x3270if</i> command can be used to connect to this socket.
+</p>
+<a name="*suppress"></a>
+<b>Name:</b> x3270.*suppress<br>
+<b>Type</b>: Boolean<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, suppresses a menu item.  For example, setting
+    <b>x3270*executeActionOption.suppress</b> to true will remove
+    the <b>Execute an Action</b> option on the <b>File</b> menu.
+    The names of the menu items are:<br>
+&nbsp;&nbsp;&nbsp;aboutMenu.aboutConfig.suppress<br>
+&nbsp;&nbsp;&nbsp;aboutMenu.aboutCopyright.suppress<br>
+&nbsp;&nbsp;&nbsp;aboutMenu.aboutStatus.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.abortScriptOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.aboutOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.disconnectOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.executeActionOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.exitOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.ftOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.printerOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.printWindowOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.saveOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.screenTraceOption.suppress<br>
+&nbsp;&nbsp;&nbsp;fileMenu.traceOption.suppress<br>
+&nbsp;&nbsp;&nbsp;modelsMenu.model2Option.suppress<br>
+&nbsp;&nbsp;&nbsp;modelsMenu.model3Option.suppress<br>
+&nbsp;&nbsp;&nbsp;modelsMenu.model4Option.suppress<br>
+&nbsp;&nbsp;&nbsp;modelsMenu.model5Option.suppress<br>
+&nbsp;&nbsp;&nbsp;modelsMenu.oversizeOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.charsetOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.colorsOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.fontsOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.idleCommandOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.keymapDisplayOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.keymapOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.modelsOption.suppress<br>
+&nbsp;&nbsp;&nbsp;optionsMenu.togglesOption.suppress<br>
+&nbsp;&nbsp;&nbsp;printerMenu.assocButton.suppress<br>
+&nbsp;&nbsp;&nbsp;printerMenu.luButton.suppress<br>
+&nbsp;&nbsp;&nbsp;printerMenu.printerOffButton.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.blankFillOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.blockCursorOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.characterModeOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.crosshairOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.cursorBlinkOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.cursorPosOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.extendedDsOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.lineModeOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.lineWrapOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.m3278Option.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.m3279Option.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.marginedPasteOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.monocaseOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.overlayPasteOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.rectangleSelectOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.scrollBarOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.showTimingOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.underlineCursorOption.suppress<br>
+&nbsp;&nbsp;&nbsp;togglesMenu.visibleControlOption.suppress
+</p>
+<a name="suppressActions"></a>
+<b>Name:</b> x3270.suppressActions<br>
+<b>Type</b>: String<br>
+<b>Description</b>:<br>
+<p class=indented>    A list of whitespace-separated action names, with or without parentheses,
+    which are to be ignored.  The actions will be completely inaccessible,
+    whether by keymaps, scripts, macros or the Execute an Action menu option.
+    This resource is intended to be used as a security precaution for users
+    who can define their own keymaps, but who do not have access to resource
+    definitions or command-line options.
+</p>
+<a name="suppressFontMenu"></a>
+<b>Name:</b> x3270.suppressFontMenu<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, the <b>Options -&gt; Font</b> menu will not be displayed.
+</p>
+<a name="suppressHost"></a>
+<b>Name:</b> x3270.suppressHost<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will omit the hostname from the
+    <b>File -&gt; About x3270 -&gt; Connection Status</b> pop-up.
+</p>
+<a name="termName"></a>
+<b>Name:</b> x3270.termName<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tn
+<br>
+<b>Description</b>:<br>
+<p class=indented>    An alternate name to be sent in response to the host's TELNET DO OPTION
+    TERMINAL-NAME request.  The default is <b>IBM-</b>, followed by the
+    value of <a href=#model>x3270.model</a>.
+</p>
+<a name="title"></a>
+<b>Name:</b> x3270.title<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -title
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Sets the title for the x3270 window, overriding the default of constructing
+    the name from the host that is connected to.
+</p>
+<a name="tls"></a>
+<b>Name:</b> x3270.tls<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, x3270 will accept TLS negotiations from the host. If false, it will
+    reject them.
+</p>
+<a name="trace"></a>
+<b>Name:</b> x3270.trace<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -trace 
+, -set trace
+, -clear trace
+<br>
+<b>Option</b>: File -&gt; Trace Data and Events<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 writes information about events and actions, as well as a
+    hexadecimal representation of all network traffic (and its interpretation)
+    into a file, which defaults to
+    <b>x3trc.<i>pid</i></b>.
+    It also pops up a window to watch the file as it
+    is created, with the pathname of the file as the window title.
+    The command run in the window is defined by <a href=#traceCommand>x3270.traceCommand</a>.
+    The directory where the file is written is defined by <a href=#traceDir>x3270.traceDir</a>.
+    If <a href=#traceFile>x3270.traceFile</a> is defined, it gives the entire pathname
+    and <a href=#traceDir>x3270.traceDir</a> is ignored.
+</p>
+<a name="traceCommand"></a>
+<b>Name:</b> x3270.traceCommand<br>
+<b>Type</b>: String<br>
+<b>Default</b>: tail -f<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the command that runs in the trace window.
+</p>
+<a name="traceDir"></a>
+<b>Name:</b> x3270.traceDir<br>
+<b>Type</b>: String<br>
+<b>Default</b>: /tmp<br>
+<b>Description</b>:<br>
+<p class=indented>    Defines the directory that trace files are written into.
+</p>
+<a name="traceFile"></a>
+<b>Name:</b> x3270.traceFile<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tracefile
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives the name of the file that data stream and event traces
+    will be written into.
+    If it begins with ">>", data will be appended to the file.
+    If given the value <b>stdout</b>, traces will
+    be written to standard output.  If given the value <b>none</b>, then the
+    traces will be piped directory to the monitor window, and no file will
+    be created.
+</p>
+<a name="traceFileSize"></a>
+<b>Name:</b> x3270.traceFileSize<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -tracefilesize
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If defined, gives a limit on the size of the file that data stream and
+    event traces will be written into.  If not defined, or defined as <b>0</b>,
+    there
+    will be no limit on the size of the file.  The value is a number, followed
+    by an optional suffix.  If the suffix is <b>K</b> (e.g., 128K),
+    the value will be multiplied by 1024.
+    If the suffix is <b>M</b>, the value will be multiplied
+    by (1024*1024).  The size limit enforced at operation boundaries, not per
+    byte, so the actual file may grow slightly larger.  When the file size
+    exceeds the limit, the trace file will be renamed with a "-" appended and
+    a new file started.
+</p>
+<a name="traceMonitor"></a>
+<b>Name:</b> x3270.traceMonitor<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will create a window to monitor data stream and
+    event traces.
+    When false, no monitor window will be
+    created (and the value of <b>none</b> for <a href=#traceFile>x3270.traceFile</a> will be
+    considered invalid).
+</p>
+<a name="unlockDelay"></a>
+<b>Name:</b> x3270.unlockDelay<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: true<br>
+<b>Description</b>:<br>
+<p class=indented>    When x3270 sends the host an AID (the <b>Enter</b>, <b>Clear</b>, <b>PF</b>
+    or <b>PA</b>
+    actions), it locks the keyboard until the host sends a reply to
+    unlock it.  Some hosts unlock the keyboard before they are actually
+    finished processing the command, which can cause scripts to malfunction
+    subtly.  To avoid this, x3270 implements a hack to briefly delay actually
+    unlocking the keyboard.
+    When <a href=#unlockDelay>x3270.unlockDelay</a> is true, the keyboard unlock
+    will be delayed for <a href=#unlockDelayMs>x3270.unlockDelayMs</a> milliseconds.  Setting it to
+    false removes this delay, except when executing a macro.
+</p>
+<a name="unlockDelayMs"></a>
+<b>Name:</b> x3270.unlockDelayMs<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 350<br>
+<b>Description</b>:<br>
+<p class=indented>    Overrides the default value for the unlock delay (the delay between the
+    host unlocking the keyboard and x3270 actually performing the unlock).
+    The value is in milliseconds; use 0 to turn off the delay completely,
+    including for macros.
+</p>
+<a name="useCursorColor"></a>
+<b>Name:</b> x3270.useCursorColor<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    If false, the cursor will be drawn using the same color as
+    the text behind it.  If true, on color X11 displays the
+    cursor will be drawn with the color specified by <a href=#cursorColor>x3270.cursorColor</a>.
+</p>
+<a name="user"></a>
+<b>Name:</b> x3270.user<br>
+<b>Type</b>: String<br>
+<b>Command Line</b>: -user
+<br>
+<b>Description</b>:<br>
+<p class=indented>    Specifies the user name sent in response to a TELNET NEW-ENVIRON
+    sub-negotiation request, used by iSeries hosts (RFC 4777).
+</p>
+<a name="verifyHostCert"></a>
+<b>Name:</b> x3270.verifyHostCert<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -verifycert
+<br>
+<b>Description</b>:<br>
+<p class=indented>    If false (the default), x3270 will not verify SSL host certificates.
+    If true or if the <b>-verifycert</b> option is given, x3270 will verify SSL
+    host certificates, and not allow an SSL or SSL/TLS connection to complete
+    unless the host certificate can be validated.
+</p>
+<a name="visibleControl"></a>
+<b>Name:</b> x3270.visibleControl<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Command Line</b>: -set visibleControl
+, -clear visibleControl
+<br>
+<b>Option</b>: Options -&gt; Toggles -&gt; Visible Control Characters<br>
+<b>Description</b>:<br>
+<p class=indented>    If true, certain control characters, which are normally displayed as
+    blanks, are displayed on the screen.
+    <p class="indented">
+    EBCDIC control characters,
+    displayed with underlines,
+    are as follows:
+    <table cols=3 width="75%">
+    <tr> <th>Character</th>
+         <th>Meaning</th>
+    </tr>
+    <tr> <td>.</td> <td>NUL (X'00')</td> </tr>
+    <tr> <td>&lt;</td> <td>The SO character (begins a DBCS subfield)</td> </tr>
+    <tr> <td>&gt;</td> <td>The SI character (ends a DBCS subfield)</td> </tr>
+    <table>
+    <p>
+    3270 field attributes,
+    displayed in yellow with underlines,
+    are decoded as follows:
+    <table cols=6 width="75%">
+    <tr> <th>Character</th>
+         <th>Protected</th>
+         <th>Numeric</th>
+         <th>Display</th>
+         <th>Selectable</th>
+         <th>Modified</th>
+    </tr>
+    <tr> <td>0</td> <td>-</td> <td>-</td> <td>normal</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>1</td> <td>-</td> <td>-</td> <td>normal</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>2</td> <td>-</td> <td>-</td> <td>normal</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>3</td> <td>-</td> <td>-</td> <td>normal</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>4</td> <td>-</td> <td>-</td> <td>intensified</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>5</td> <td>-</td> <td>-</td> <td>intensified</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>6</td> <td>-</td> <td>-</td> <td>nondisplay</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>7</td> <td>-</td> <td>-</td> <td>nondisplay</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>8</td> <td>-</td> <td>numeric</td> <td>normal</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>9</td> <td>-</td> <td>numeric</td> <td>normal</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>A</td> <td>-</td> <td>numeric</td> <td>normal</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>B</td> <td>-</td> <td>numeric</td> <td>normal</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>C</td> <td>-</td> <td>numeric</td> <td>intensified</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>D</td> <td>-</td> <td>numeric</td> <td>intensified</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>E</td> <td>-</td> <td>numeric</td> <td>nondisplay</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>F</td> <td>-</td> <td>numeric</td> <td>nondisplay</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>G</td> <td>protected</td> <td>-</td> <td>normal</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>H</td> <td>protected</td> <td>-</td> <td>normal</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>I</td> <td>protected</td> <td>-</td> <td>normal</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>J</td> <td>protected</td> <td>-</td> <td>normal</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>K</td> <td>protected</td> <td>-</td> <td>intensified</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>L</td> <td>protected</td> <td>-</td> <td>intensified</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>M</td> <td>protected</td> <td>-</td> <td>nondisplay</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>N</td> <td>protected</td> <td>-</td> <td>nondisplay</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>O</td> <td>protected</td> <td>numeric</td> <td>normal</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>P</td> <td>protected</td> <td>numeric</td> <td>normal</td> <td>-</td> <td>modified</td> </tr>
+    <tr> <td>Q</td> <td>protected</td> <td>numeric</td> <td>normal</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>R</td> <td>protected</td> <td>numeric</td> <td>normal</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>S</td> <td>protected</td> <td>numeric</td> <td>intensified</td> <td>selectable</td> <td>-</td> </tr>
+    <tr> <td>T</td> <td>protected</td> <td>numeric</td> <td>intensified</td> <td>selectable</td> <td>modified</td> </tr>
+    <tr> <td>U</td> <td>protected</td> <td>numeric</td> <td>nondisplay</td> <td>-</td> <td>-</td> </tr>
+    <tr> <td>V</td> <td>protected</td> <td>numeric</td> <td>nondisplay</td> <td>-</td> <td>modified</td> </tr>
+    </table>
+</p>
+<a name="visualBell"></a>
+<b>Name:</b> x3270.visualBell<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    When true, x3270 will flash the screen in response to an ALARM WCC
+    or BELL character, rather than ringing the terminal's bell.
+</p>
+<a name="visualSelect"></a>
+<b>Name:</b> x3270.visualSelect<br>
+<b>Type</b>: Boolean<br>
+<b>Default</b>: false<br>
+<b>Description</b>:<br>
+<p class=indented>    This resource controls how x3270 displays light pen selectable fields
+    that do not have a color explicitly set by the host.
+    When true,
+    x3270 will display these fields using the color defined by
+    <a href=#visualSelectColor>x3270.visualSelectColor</a>.
+    When false, x3270 will display these fields based on
+    their highlighting attribute.  This attribute is used only in 3279 mode.
+</p>
+<a name="visualSelectColor"></a>
+<b>Name:</b> x3270.visualSelectColor<br>
+<b>Type</b>: Integer<br>
+<b>Default</b>: 6<br>
+<b>Description</b>:<br>
+<p class=indented>    The host color index of the color to use to display light pen
+    selectable fields.  This resource is used only if <a href=#visualSelect>x3270.visualSelect</a> is
+    true.  The default is 6 (yellow).
+</p>
+<a name="waitCursor"></a>
+<b>Name:</b> x3270.waitCursor<br>
+<b>Type</b>: String<br>
+<b>Default</b>: watch<br>
+<b>Description</b>:<br>
+<p class=indented>    The name of the mouse cursor displayed when x3270 is connected to a host,
+    but is unable to process keyboard input.  Cursor names are in the file
+    <b>&lt;X11/cursorfont.h&gt;</b>.
+</p>
+<a name="werase"></a>
+<b>Name:</b> x3270.werase<br>
+<b>Type</b>: String<br>
+<b>Default</b>: ^W<br>
+<b>Description</b>:<br>
+<p class=indented>    This setting is used only in NVT mode, and is similar in function to
+    the <i>stty</i> parameter of the same name.
+    When connected in line-at-a-time mode (when x3270
+    gathers a line of input before forwarding it to the host), entering
+    this character at the keyboard erases the last word of input.
+    <p class=indented>
+    When connected in character-at-a-time mode (when x3270 sends each
+    keystroke to the host), this is the ASCII character that is sent to
+    the host by the <b>DeleteWord</b> action.
+</p>
+<h2>Index of All Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#acceptHostname">acceptHostname</a></td> <td><a href="#activeIcon">activeIcon</a></td> <td><a href="#aidWait">aidWait</a></td> <td><a href="#allowResize">allowResize</a></td> </tr>
+<tr> <td><a href="#altCursor">altCursor</a></td> <td><a href="#aplCircledAlpha">aplCircledAlpha</a></td> <td><a href="#aplMode">aplMode</a></td> <td><a href="#background">background</a></td> </tr>
+<tr> <td><a href="#bellVolume">bellVolume</a></td> <td><a href="#bindLimit">bindLimit</a></td> <td><a href="#blankFill">blankFill</a></td> <td><a href="#boldColor">boldColor</a></td> </tr>
+<tr> <td><a href="#bsdTm">bsdTm</a></td> <td><a href="#caDir">caDir</a></td> <td><a href="#caFile">caFile</a></td> <td><a href="#certFile">certFile</a></td> </tr>
+<tr> <td><a href="#certFileType">certFileType</a></td> <td><a href="#chainFile">chainFile</a></td> <td><a href="#charClass">charClass</a></td> <td><a href="#charset">charset</a></td> </tr>
+<tr> <td><a href="#color8">color8</a></td> <td><a href="#colorBackground">colorBackground</a></td> <td><a href="#colorScheme">colorScheme</a></td> <td><a href="#colorScheme.foo">colorScheme.<i>foo</i></a></td> </tr>
+<tr> <td><a href="#composeMap">composeMap</a></td> <td><a href="#composeMap.foo">composeMap.<i>foo</i></a></td> <td><a href="#confDir">confDir</a></td> <td><a href="#connectFileName">connectFileName</a></td> </tr>
+<tr> <td><a href="#crosshair">crosshair</a></td> <td><a href="#cursorBlink">cursorBlink</a></td> <td><a href="#cursorColor">cursorColor</a></td> <td><a href="#cursorPos">cursorPos</a></td> </tr>
+<tr> <td><a href="#dbcsCgcsgid">dbcsCgcsgid</a></td> <td><a href="#debugTracing">debugTracing</a></td> <td><a href="#dftBufferSize">dftBufferSize</a></td> <td><a href="#devName">devName</a></td> </tr>
+<tr> <td><a href="#disconnectClear">disconnectClear</a></td> <td><a href="#doConfirms">doConfirms</a></td> <td><a href="#dsTrace">dsTrace</a></td> <td><a href="#emulatorFont">emulatorFont</a></td> </tr>
+<tr> <td><a href="#eof">eof</a></td> <td><a href="#erase">erase</a></td> <td><a href="#eventTrace">eventTrace</a></td> <td><a href="#extended">extended</a></td> </tr>
+<tr> <td><a href="#fixedSize">fixedSize</a></td> <td><a href="#foreground">foreground</a></td> <td><a href="#ftAllocation">ftAllocation</a></td> <td><a href="#ftAvblock">ftAvblock</a></td> </tr>
+<tr> <td><a href="#ftBlksize">ftBlksize</a></td> <td><a href="#ftBufferSize">ftBufferSize</a></td> <td><a href="#ftCr">ftCr</a></td> <td><a href="#ftDirection">ftDirection</a></td> </tr>
+<tr> <td><a href="#ftExist">ftExist</a></td> <td><a href="#ftHost">ftHost</a></td> <td><a href="#ftHostFile">ftHostFile</a></td> <td><a href="#ftLocalFile">ftLocalFile</a></td> </tr>
+<tr> <td><a href="#ftLrecl">ftLrecl</a></td> <td><a href="#ftMode">ftMode</a></td> <td><a href="#ftPrimarySpace">ftPrimarySpace</a></td> <td><a href="#ftRecfm">ftRecfm</a></td> </tr>
+<tr> <td><a href="#ftRemap">ftRemap</a></td> <td><a href="#ftSecondarySpace">ftSecondarySpace</a></td> <td><a href="#highlightBold">highlightBold</a></td> <td><a href="#hostname">hostname</a></td> </tr>
+<tr> <td><a href="#hostsFile">hostsFile</a></td> <td><a href="#httpd">httpd</a></td> <td><a href="#iconFont">iconFont</a></td> <td><a href="#iconLabelFont">iconLabelFont</a></td> </tr>
+<tr> <td><a href="#icrnl">icrnl</a></td> <td><a href="#idleCommand">idleCommand</a></td> <td><a href="#idleCommandEnabled">idleCommandEnabled</a></td> <td><a href="#idleTimeout">idleTimeout</a></td> </tr>
+<tr> <td><a href="#inlcr">inlcr</a></td> <td><a href="#inputColor">inputColor</a></td> <td><a href="#inputMethod">inputMethod</a></td> <td><a href="#intr">intr</a></td> </tr>
+<tr> <td><a href="#invertKeypadShift">invertKeypadShift</a></td> <td><a href="#keyFile">keyFile</a></td> <td><a href="#keyFileType">keyFileType</a></td> <td><a href="#keyHeight">keyHeight</a></td> </tr>
+<tr> <td><a href="#keymap">keymap</a></td> <td><a href="#keymap.foo">keymap.<i>foo</i></a></td> <td><a href="#keypad">keypad</a></td> <td><a href="#keypad.keyHeight">keypad.keyHeight</a></td> </tr>
+<tr> <td><a href="#keyPasswd">keyPasswd</a></td> <td><a href="#keyWidth">keyWidth</a></td> <td><a href="#keypad.largeKeyWidth">keypad.largeKeyWidth</a></td> <td><a href="#keypad.paWidth">keypad.paWidth</a></td> </tr>
+<tr> <td><a href="#keypad.pfWidth">keypad.pfWidth</a></td> <td><a href="#keypadBackground">keypadBackground</a></td> <td><a href="#keypadOn">keypadOn</a></td> <td><a href="#kill">kill</a></td> </tr>
+<tr> <td><a href="#labelIcon">labelIcon</a></td> <td><a href="#largeKeyWidth">largeKeyWidth</a></td> <td><a href="#lineWrap">lineWrap</a></td> <td><a href="#loginMacro">loginMacro</a></td> </tr>
+<tr> <td><a href="#lnext">lnext</a></td> <td><a href="#lockedCursor">lockedCursor</a></td> <td><a href="#m3279">m3279</a></td> <td><a href="#macros">macros</a></td> </tr>
+<tr> <td><a href="#macros.foo">macros.<i>foo</i></a></td> <td><a href="#marginedPaste">marginedPaste</a></td> <td><a href="#maxRecent">maxRecent</a></td> <td><a href="#menuBar">menuBar</a></td> </tr>
+<tr> <td><a href="#model">model</a></td> <td><a href="#modifiedSel">modifiedSel</a></td> <td><a href="#modifiedSelColor">modifiedSelColor</a></td> <td><a href="#mono">mono</a></td> </tr>
+<tr> <td><a href="#monoCase">monoCase</a></td> <td><a href="#newEnviron">newEnviron</a></td> <td><a href="#noOther">noOther</a></td> <td><a href="#normalCursor">normalCursor</a></td> </tr>
+<tr> <td><a href="#normalColor">normalColor</a></td> <td><a href="#numericLock">numericLock</a></td> <td><a href="#nvtMode">nvtMode</a></td> <td><a href="#onlcr">onlcr</a></td> </tr>
+<tr> <td><a href="#oerrLock">oerrLock</a></td> <td><a href="#once">once</a></td> <td><a href="#overlayPaste">overlayPaste</a></td> <td><a href="#oversize">oversize</a></td> </tr>
+<tr> <td><a href="#paWidth">paWidth</a></td> <td><a href="#pfWidth">pfWidth</a></td> <td><a href="#port">port</a></td> <td><a href="#proxy">proxy</a></td> </tr>
+<tr> <td><a href="#preeditType">preeditType</a></td> <td><a href="#printerLu">printerLu</a></td> <td><a href="#printer.assocCommandLine">printer.assocCommandLine</a></td> <td><a href="#printer.command">printer.command</a></td> </tr>
+<tr> <td><a href="#printer.luCommandLine">printer.luCommandLine</a></td> <td><a href="#printer.options">printer.options</a></td> <td><a href="#printTextCommand">printTextCommand</a></td> <td><a href="#printTextScreensPerPage">printTextScreensPerPage</a></td> </tr>
+<tr> <td><a href="#printWindowCommand">printWindowCommand</a></td> <td><a href="#quit">quit</a></td> <td><a href="#reconnect">reconnect</a></td> <td><a href="#rectangleSelect">rectangleSelect</a></td> </tr>
+<tr> <td><a href="#rprnt">rprnt</a></td> <td><a href="#saveLines">saveLines</a></td> <td><a href="#sbcsCgcsgid">sbcsCgcsgid</a></td> <td><a href="#schemeList">schemeList</a></td> </tr>
+<tr> <td><a href="#screenTrace">screenTrace</a></td> <td><a href="#screenTraceFile">screenTraceFile</a></td> <td><a href="#scripted">scripted</a></td> <td><a href="#scriptPort">scriptPort</a></td> </tr>
+<tr> <td><a href="#scrollBar">scrollBar</a></td> <td><a href="#secure">secure</a></td> <td><a href="#selectBackground">selectBackground</a></td> <td><a href="#selfSignedOk">selfSignedOk</a></td> </tr>
+<tr> <td><a href="#showTiming">showTiming</a></td> <td><a href="#socket">socket</a></td> <td><a href="#*suppress">*suppress</a></td> <td><a href="#suppressActions">suppressActions</a></td> </tr>
+<tr> <td><a href="#suppressFontMenu">suppressFontMenu</a></td> <td><a href="#suppressHost">suppressHost</a></td> <td><a href="#termName">termName</a></td> <td><a href="#title">title</a></td> </tr>
+<tr> <td><a href="#tls">tls</a></td> <td><a href="#trace">trace</a></td> <td><a href="#traceCommand">traceCommand</a></td> <td><a href="#traceDir">traceDir</a></td> </tr>
+<tr> <td><a href="#traceFile">traceFile</a></td> <td><a href="#traceFileSize">traceFileSize</a></td> <td><a href="#traceMonitor">traceMonitor</a></td> <td><a href="#unlockDelay">unlockDelay</a></td> </tr>
+<tr> <td><a href="#unlockDelayMs">unlockDelayMs</a></td> <td><a href="#useCursorColor">useCursorColor</a></td> <td><a href="#user">user</a></td> <td><a href="#verifyHostCert">verifyHostCert</a></td> </tr>
+<tr> <td><a href="#visibleControl">visibleControl</a></td> <td><a href="#visualBell">visualBell</a></td> <td><a href="#visualSelect">visualSelect</a></td> <td><a href="#visualSelectColor">visualSelectColor</a></td> </tr>
+<tr> <td><a href="#waitCursor">waitCursor</a></td> <td><a href="#werase">werase</a></td> </tr>
+</table>
+<h2>Basic Configuration Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#charset">charset</a></td> <td><a href="#hostname">hostname</a></td> <td><a href="#keymap">keymap</a></td> <td><a href="#model">model</a></td> </tr>
+<tr> <td><a href="#port">port</a></td> <td><a href="#proxy">proxy</a></td> <td><a href="#printerLu">printerLu</a></td> </tr>
+</table>
+<h2>Appearance Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#activeIcon">activeIcon</a></td> <td><a href="#altCursor">altCursor</a></td> <td><a href="#aplCircledAlpha">aplCircledAlpha</a></td> <td><a href="#background">background</a></td> </tr>
+<tr> <td><a href="#boldColor">boldColor</a></td> <td><a href="#colorBackground">colorBackground</a></td> <td><a href="#colorScheme">colorScheme</a></td> <td><a href="#colorScheme.foo">colorScheme.<i>foo</i></a></td> </tr>
+<tr> <td><a href="#crosshair">crosshair</a></td> <td><a href="#cursorBlink">cursorBlink</a></td> <td><a href="#cursorColor">cursorColor</a></td> <td><a href="#cursorPos">cursorPos</a></td> </tr>
+<tr> <td><a href="#emulatorFont">emulatorFont</a></td> <td><a href="#fixedSize">fixedSize</a></td> <td><a href="#foreground">foreground</a></td> <td><a href="#highlightBold">highlightBold</a></td> </tr>
+<tr> <td><a href="#iconFont">iconFont</a></td> <td><a href="#iconLabelFont">iconLabelFont</a></td> <td><a href="#inputColor">inputColor</a></td> <td><a href="#keyHeight">keyHeight</a></td> </tr>
+<tr> <td><a href="#keypad">keypad</a></td> <td><a href="#keypad.keyHeight">keypad.keyHeight</a></td> <td><a href="#keyWidth">keyWidth</a></td> <td><a href="#keypad.largeKeyWidth">keypad.largeKeyWidth</a></td> </tr>
+<tr> <td><a href="#keypad.paWidth">keypad.paWidth</a></td> <td><a href="#keypad.pfWidth">keypad.pfWidth</a></td> <td><a href="#keypadBackground">keypadBackground</a></td> <td><a href="#labelIcon">labelIcon</a></td> </tr>
+<tr> <td><a href="#largeKeyWidth">largeKeyWidth</a></td> <td><a href="#lockedCursor">lockedCursor</a></td> <td><a href="#menuBar">menuBar</a></td> <td><a href="#modifiedSel">modifiedSel</a></td> </tr>
+<tr> <td><a href="#modifiedSelColor">modifiedSelColor</a></td> <td><a href="#normalCursor">normalCursor</a></td> <td><a href="#normalColor">normalColor</a></td> <td><a href="#paWidth">paWidth</a></td> </tr>
+<tr> <td><a href="#pfWidth">pfWidth</a></td> <td><a href="#selectBackground">selectBackground</a></td> <td><a href="#showTiming">showTiming</a></td> <td><a href="#title">title</a></td> </tr>
+<tr> <td><a href="#useCursorColor">useCursorColor</a></td> <td><a href="#visualSelect">visualSelect</a></td> <td><a href="#visualSelectColor">visualSelectColor</a></td> <td><a href="#waitCursor">waitCursor</a></td> </tr>
+</table>
+<h2>NVT-Mode Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#eof">eof</a></td> <td><a href="#erase">erase</a></td> <td><a href="#icrnl">icrnl</a></td> <td><a href="#inlcr">inlcr</a></td> </tr>
+<tr> <td><a href="#intr">intr</a></td> <td><a href="#kill">kill</a></td> <td><a href="#lineWrap">lineWrap</a></td> <td><a href="#lnext">lnext</a></td> </tr>
+<tr> <td><a href="#onlcr">onlcr</a></td> <td><a href="#quit">quit</a></td> <td><a href="#rprnt">rprnt</a></td> <td><a href="#werase">werase</a></td> </tr>
+</table>
+<h2>Protocol Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#bindLimit">bindLimit</a></td> <td><a href="#bsdTm">bsdTm</a></td> <td><a href="#color8">color8</a></td> <td><a href="#dbcsCgcsgid">dbcsCgcsgid</a></td> </tr>
+<tr> <td><a href="#dftBufferSize">dftBufferSize</a></td> <td><a href="#devName">devName</a></td> <td><a href="#ftBufferSize">ftBufferSize</a></td> <td><a href="#sbcsCgcsgid">sbcsCgcsgid</a></td> </tr>
+<tr> <td><a href="#termName">termName</a></td> <td><a href="#user">user</a></td> </tr>
+</table>
+<h2>Terminal Interaction Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#blankFill">blankFill</a></td> <td><a href="#ftAllocation">ftAllocation</a></td> <td><a href="#ftAvblock">ftAvblock</a></td> <td><a href="#ftBlksize">ftBlksize</a></td> </tr>
+<tr> <td><a href="#ftCr">ftCr</a></td> <td><a href="#ftDirection">ftDirection</a></td> <td><a href="#ftExist">ftExist</a></td> <td><a href="#ftHost">ftHost</a></td> </tr>
+<tr> <td><a href="#ftHostFile">ftHostFile</a></td> <td><a href="#ftLocalFile">ftLocalFile</a></td> <td><a href="#ftLrecl">ftLrecl</a></td> <td><a href="#ftMode">ftMode</a></td> </tr>
+<tr> <td><a href="#ftPrimarySpace">ftPrimarySpace</a></td> <td><a href="#ftRecfm">ftRecfm</a></td> <td><a href="#ftRemap">ftRemap</a></td> <td><a href="#ftSecondarySpace">ftSecondarySpace</a></td> </tr>
+<tr> <td><a href="#idleCommand">idleCommand</a></td> <td><a href="#idleCommandEnabled">idleCommandEnabled</a></td> <td><a href="#idleTimeout">idleTimeout</a></td> <td><a href="#marginedPaste">marginedPaste</a></td> </tr>
+<tr> <td><a href="#maxRecent">maxRecent</a></td> <td><a href="#numericLock">numericLock</a></td> <td><a href="#nvtMode">nvtMode</a></td> <td><a href="#oerrLock">oerrLock</a></td> </tr>
+<tr> <td><a href="#overlayPaste">overlayPaste</a></td> <td><a href="#rectangleSelect">rectangleSelect</a></td> <td><a href="#visualBell">visualBell</a></td> </tr>
+</table>
+<h2>Security Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#acceptHostname">acceptHostname</a></td> <td><a href="#caDir">caDir</a></td> <td><a href="#caFile">caFile</a></td> <td><a href="#certFile">certFile</a></td> </tr>
+<tr> <td><a href="#certFileType">certFileType</a></td> <td><a href="#chainFile">chainFile</a></td> <td><a href="#debugTracing">debugTracing</a></td> <td><a href="#keyFile">keyFile</a></td> </tr>
+<tr> <td><a href="#keyFileType">keyFileType</a></td> <td><a href="#keyPasswd">keyPasswd</a></td> <td><a href="#noOther">noOther</a></td> <td><a href="#secure">secure</a></td> </tr>
+<tr> <td><a href="#selfSignedOk">selfSignedOk</a></td> <td><a href="#*suppress">*suppress</a></td> <td><a href="#suppressActions">suppressActions</a></td> <td><a href="#tls">tls</a></td> </tr>
+<tr> <td><a href="#verifyHostCert">verifyHostCert</a></td> </tr>
+</table>
+<h2>Tracing Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#debugTracing">debugTracing</a></td> <td><a href="#dsTrace">dsTrace</a></td> <td><a href="#eventTrace">eventTrace</a></td> <td><a href="#screenTrace">screenTrace</a></td> </tr>
+<tr> <td><a href="#screenTraceFile">screenTraceFile</a></td> <td><a href="#trace">trace</a></td> <td><a href="#traceDir">traceDir</a></td> <td><a href="#traceFile">traceFile</a></td> </tr>
+<tr> <td><a href="#traceFileSize">traceFileSize</a></td> <td><a href="#traceMonitor">traceMonitor</a></td> </tr>
+</table>
+<h2>Other Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#aidWait">aidWait</a></td> <td><a href="#allowResize">allowResize</a></td> <td><a href="#aplMode">aplMode</a></td> <td><a href="#bellVolume">bellVolume</a></td> </tr>
+<tr> <td><a href="#charClass">charClass</a></td> <td><a href="#composeMap">composeMap</a></td> <td><a href="#composeMap.foo">composeMap.<i>foo</i></a></td> <td><a href="#confDir">confDir</a></td> </tr>
+<tr> <td><a href="#connectFileName">connectFileName</a></td> <td><a href="#disconnectClear">disconnectClear</a></td> <td><a href="#doConfirms">doConfirms</a></td> <td><a href="#hostsFile">hostsFile</a></td> </tr>
+<tr> <td><a href="#httpd">httpd</a></td> <td><a href="#inputMethod">inputMethod</a></td> <td><a href="#invertKeypadShift">invertKeypadShift</a></td> <td><a href="#keymap.foo">keymap.<i>foo</i></a></td> </tr>
+<tr> <td><a href="#keypadOn">keypadOn</a></td> <td><a href="#loginMacro">loginMacro</a></td> <td><a href="#macros">macros</a></td> <td><a href="#macros.foo">macros.<i>foo</i></a></td> </tr>
+<tr> <td><a href="#mono">mono</a></td> <td><a href="#monoCase">monoCase</a></td> <td><a href="#newEnviron">newEnviron</a></td> <td><a href="#once">once</a></td> </tr>
+<tr> <td><a href="#oversize">oversize</a></td> <td><a href="#preeditType">preeditType</a></td> <td><a href="#printer.assocCommandLine">printer.assocCommandLine</a></td> <td><a href="#printer.command">printer.command</a></td> </tr>
+<tr> <td><a href="#printer.luCommandLine">printer.luCommandLine</a></td> <td><a href="#printer.options">printer.options</a></td> <td><a href="#printTextCommand">printTextCommand</a></td> <td><a href="#printTextScreensPerPage">printTextScreensPerPage</a></td> </tr>
+<tr> <td><a href="#printWindowCommand">printWindowCommand</a></td> <td><a href="#reconnect">reconnect</a></td> <td><a href="#saveLines">saveLines</a></td> <td><a href="#schemeList">schemeList</a></td> </tr>
+<tr> <td><a href="#scripted">scripted</a></td> <td><a href="#scriptPort">scriptPort</a></td> <td><a href="#scrollBar">scrollBar</a></td> <td><a href="#socket">socket</a></td> </tr>
+<tr> <td><a href="#suppressFontMenu">suppressFontMenu</a></td> <td><a href="#suppressHost">suppressHost</a></td> <td><a href="#traceCommand">traceCommand</a></td> <td><a href="#unlockDelay">unlockDelay</a></td> </tr>
+<tr> <td><a href="#unlockDelayMs">unlockDelayMs</a></td> <td><a href="#visibleControl">visibleControl</a></td> </tr>
+</table>
+<h2>Deprecated Resources</h2>
+<table border cols=4 width="75%">
+<tr> <td><a href="#extended">extended</a></td> <td><a href="#m3279">m3279</a></td> </tr>
+</table>
+<p><i>x3270 version 3.4ga9 Fri Oct 23 09:51:16 CDT 2015
+
+</body>
