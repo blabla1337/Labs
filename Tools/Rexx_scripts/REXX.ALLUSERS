@@ -1,0 +1,175 @@
+/* REXX */
+/* Script to retrieve all information regarding all or
+   a specific user
+   Execute from TSO : EXEC 'REXX.ALLUSERS' '[USER] [INFOALL=NO]'   
+   Execute from OMVS : chmod +x REXX.ALLUSERS; ./REXX.ALLUSERS
+   Authorizations : READ access to Search command
+                    READ Access to SETR LIST command
+   
+   Warning : INFOALL=YES can be very very verbose..be careful
+   Source : http://www.xephon.com/arcinframe.php//f002a04
+   @Ayoul3 : added iteration through all users
+   
+   TODO : choose a specific info to get rather than all or nothing
+*/
+
+  arg USERID INFOALL
+  
+  if USERID="" then
+      do  
+        x = OUTTRAP('users.')
+        address tso 'sr class(USER)'
+        x = OUTTRAP('OFF')
+        
+        say users.0 'users are present on the system'
+        do i=1 to users.0
+           say users.i
+           call get_infos users.i
+        end
+      end
+  else call get_infos USERID 
+  exit
+  
+
+get_infos:
+  USER  = arg(1)
+  if sysvar(syspref) = "" then
+    do
+      address tso "profile prefix("sysvar(sysuid)")"
+      prfxon = on
+    end
+/******************* RACF User   ***********************************/
+  title1 = " " || USER || " INFORMATION "
+  say center(title1,75,"*")
+  say ""
+  address tso "LISTUSER" USER "CICS DCE DFP EIM",
+    "KERB LANGUAGE LNOTES NDS NETVIEW",
+    "OMVS OPERPARM OVM PROXY TSO WORKATTR"
+  say ""
+/******************* RACF User   ***********************************/
+  title1 = "DATASET PROFILE"
+  say center(title1,75,"*")
+  say ""
+  address tso "LISTDSD ALL DATASET('"user".**')"
+  say ""
+/******************* RACF GROUPS ***********************************/
+  title1 = " GROUPS " || USER || " ADMINISTERS "
+  say center(title1,75,"*")
+  say ""
+  if INFOALL = "ALL" then
+    do
+      address tso "SEARCH USER(" USER ") CLASS(GROUP) CLIST('LG ')"
+      "ALLOC FILE(RACFEXEC)",
+        "DATASET('"sysvar(SYSPREF)".EXEC.RACF.CLIST') SHR REUSE"
+      "EXECIO * DISKR RACFEXEC (FINIS STEM RACFCMD."
+      "FREE FILE(RACFEXEC)"
+      if (RACFCMD.0 > 1) then,
+        do
+          say ""
+          title1 = " GROUP DETAIL INFORMATION "
+          say center(title1,75,"*")
+          say ""
+          address tso "EXEC '"sysvar(SYSPREF)".EXEC.RACF.CLIST'"
+          say ""
+        end
+    end
+  else
+    do
+      address tso "SEARCH USER(" USER ") CLASS(GROUP)"
+    end
+/******************* RACF DATASETS *********************************/
+  title1 = " DATASETS ACCESSIBLE BY " || USER || " "
+  say center(title1,75,"*")
+  say ""
+  if INFOALL = "ALL" then
+    do
+      address tso "SR USER("USER") LIST NOMASK CLIST('LD DA(' ') AUTH')"
+      "ALLOC FILE(RACFEXEC)",
+        "DATASET('"sysvar(SYSPREF)".EXEC.RACF.CLIST') SHR REUSE"
+      "EXECIO * DISKR RACFEXEC (FINIS STEM RACFCMD."
+      "FREE FILE(RACFEXEC)"
+      if (RACFCMD.0 > 1) then,
+        do
+          say ""
+          title1 = " DATASET ACCESS DETAIL INFORMATION "
+          say center(title1,75,"*")
+          say ""
+          address tso "EXEC '"sysvar(SYSPREF)".EXEC.RACF.CLIST'"
+          say ""
+        end
+    end
+  else
+    do
+      address tso "SR USER("USER") LIST NOMASK"
+    end
+/******************* RACF GENERAL RESOURCES ************************/
+  call get_active_classes
+  do gr_x = 1 to grindd.0
+    record = grindd.gr_x
+    record = substr(record,1,8)
+    title1 = " GENERAL RESOURCE "||record||,
+      " ACCESSIBLE BY "||USER||" "
+    say center(title1,75,"*")
+    if INFOALL = "ALL" then
+      do
+        say ""
+        address tso "SR USER("USER") CLASS("record") CLIST('RL ",
+          record" ' ' AUTH')"
+        "ALLOC FILE(RACFEXEC)",
+          "DATASET('"sysvar(SYSPREF)".EXEC.RACF.CLIST') SHR REUSE"
+        "EXECIO * DISKR RACFEXEC (FINIS STEM RACFCMD."
+        "FREE FILE(RACFEXEC)"
+        if (RACFCMD.0 > 1) then,
+          do
+            say ""
+            title1 = " GENERAL RESOURCE "||,
+              record||" DETAIL INFORMATION "
+            say center(title1,75,"*")
+            say ""
+            address tso "EXEC '"sysvar(SYSPREF)".EXEC.RACF.CLIST'"
+            say ""
+          end
+      end
+    else
+      do
+        address tso "SR USER("USER") CLASS("record")"
+      end
+  end
+/******************* END OF EXEC ***********************************/
+  if prfxon = on then
+    address tso "PROFILE NOPREFIX"
+return 
+
+
+/******************* issue setr list to get active classes *********/
+get_active_classes:
+  quiet = OutTrap("RACF.")
+  "SETROPTS LIST"
+  quiet = OutTrap("OFF")
+  process = "Off"
+  r_x = 0
+
+  do racf_x = 1 to racf.0
+    setr = racf.racf_x
+    if (pos("ACTIVE CLASSES =",setr) > 0) then,
+      do
+        process = "ON"
+        parse var setr junk "=" setr
+      end
+    if ((process = "ON") & (left(setr,1)  >< "")) then,
+      do
+        Leave
+      end
+    if (process = "Off") then iterate
+    do while setr >< ""
+      parse var setr res " " setr
+      if ((res = "DATASET") | (res = " ") | (res = "")) then,
+        iterate
+      if ((res = "USER") | (res = "GROUP")) then,
+        iterate
+      r_x = r_x + 1
+      grindd.r_x = res
+    end
+  end
+  grindd.0 = r_x
+  return
